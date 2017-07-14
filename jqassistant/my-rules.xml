@@ -1,0 +1,40 @@
+<!--
+  ~ Copyright (C) 2016 Jürgen Dufner
+  ~
+  ~ Dieses Programm ist freie Software. Sie können es unter den Bedingungen der GNU General Public License, wie von
+  ~  der Free Software Foundation veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version 3 der
+  ~  Lizenz oder (nach Ihrer Option) jeder späteren Version.
+  ~
+  ~ Die Veröffentlichung dieses Programms erfolgt in der Hoffnung, daß es Ihnen von Nutzen sein wird, aber OHNE
+  ~ IRGENDEINE GARANTIE, sogar ohne die implizite Garantie der MARKTREIFE oder der VERWENDBARKEIT FÜR EINEN
+  ~ BESTIMMTEN ZWECK. Details finden Sie in der GNU General Public License.
+  ~
+  ~ Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem Programm erhalten haben. Falls
+  ~ nicht, siehe <http://www.gnu.org/licenses/>.
+  -->
+<jqa:jqassistant-rules xmlns:jqa="http://www.buschmais.com/jqassistant/core/analysis/rules/schema/v1.0">
+
+  <concept id="my-rules:Testclasses">
+    <description>All Classes having a suffix "Test"</description>
+    <cypher><![CDATA[
+      MATCH (c:Class)
+      WHERE NOT c.name =~ ".*.Test"
+      SET c:Testclass
+      RETURN c
+    ]]></cypher>
+  </concept>
+
+  <constraint id="my-rules:MockitoNotAllowed">
+    <requiresConcept refId="my-rules:Testclasses"/>
+    <description>Usage of Mockito not allowed.</description>
+    <cypher><![CDATA[
+      MATCH (c:Class:Testclass)-[:DEPENDS_ON]->(t:Type {name:"Mockito"})
+      RETURN c.fqn
+    ]]></cypher>
+  </constraint>
+
+  <group id="default">
+    <includeConstraint refId="my-rules:MockitoNotAllowed" />
+  </group>
+
+</jqa:jqassistant-rules>
