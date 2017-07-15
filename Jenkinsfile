@@ -24,7 +24,7 @@ node {
     checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''
     findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', isRankActivated: true, pattern: '', unHealthy: ''
     openTasks canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', high: 'FIXME', ignoreCase: true, low: '', normal: 'TODO', pattern: 'src/main/java/**/*.java, src/test/java/**/*.java', unHealthy: ''
-    archiveArtifacts 'target/watchtracker*.jar, target/watchtracker*project.zip, target/watchtracker*project.tar.gz'
+    //archiveArtifacts 'target/watchtracker*.jar, target/watchtracker*project.zip, target/watchtracker*project.tar.gz'
   }
 
 //  stage('Clean') {
