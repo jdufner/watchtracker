@@ -16,7 +16,7 @@ node {
     sh "${mvnHome}/bin/mvn clean install sonar:sonar -U -Pqa"
   }
 
-  stage('Archive') {
+  stage('Result') {
     //junit 'target/*-reports/TEST-*.xml'
     junit 'target/surefire-reports/TEST*.xml, target/failsafe-reports/TEST*.xml'
     //jacoco (execPattern: 'target/coverage-reports/jacoco-ut.exec')
@@ -24,7 +24,10 @@ node {
     checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''
     findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', isRankActivated: true, pattern: '', unHealthy: ''
     openTasks canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', high: 'FIXME', ignoreCase: true, low: '', normal: 'TODO', pattern: 'src/main/java/**/*.java, src/test/java/**/*.java', unHealthy: ''
-    //archiveArtifacts 'target/watchtracker*.jar, target/watchtracker*project.zip, target/watchtracker*project.tar.gz'
+  }
+
+  stage('Archive') {
+    archiveArtifacts 'target/tracker*.jar, target/tracker*project.zip'
   }
 
 //  stage('Clean') {
