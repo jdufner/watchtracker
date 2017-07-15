@@ -32,19 +32,29 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-package de.jdufner.watch.tracker;
+package de.jdufner.watch.tracker.services;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import de.jdufner.watch.tracker.businessobjects.Abweichung;
+import de.jdufner.watch.tracker.repositories.AbweichungRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class TrackerApplicationIT {
+/**
+ * @author Jürgen Dufner
+ * @since 0.0
+ */
+@Service
+public class AbweichungService {
 
-  @Test
-  public void contextLoads() {
+  private AbweichungRepository abweichungRepository;
+
+  public AbweichungService(final AbweichungRepository abweichungRepository) {
+    this.abweichungRepository = abweichungRepository;
+  }
+
+  @Transactional
+  public Abweichung saveAbweichung(final Abweichung abweichung) {
+    return abweichungRepository.save(abweichung);
   }
 
 }

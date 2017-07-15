@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2017.
  *
@@ -32,19 +33,37 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-package de.jdufner.watch.tracker;
+package de.jdufner.watch.tracker.businessobjects;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import lombok.Data;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class TrackerApplicationIT {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 
-  @Test
-  public void contextLoads() {
-  }
+/**
+ * @author Jürgen Dufner
+ * @since 0.0
+ */
+@Data
+@Entity
+public class Abweichung {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  private long id;
+
+  @NotNull
+  @Column(unique = true)
+  private Date erfassungszeitpunkt;
+
+  @NotNull
+  private int differenz;
+
+  private int korrektur;
 
 }

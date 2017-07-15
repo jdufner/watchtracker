@@ -32,19 +32,39 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-package de.jdufner.watch.tracker;
+package de.jdufner.watch.tracker.services;
 
+import de.jdufner.watch.tracker.businessobjects.Abweichung;
+import de.jdufner.watch.tracker.businessobjects.AbweichungTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * @author Jürgen Dufner
+ * @since 0.0
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TrackerApplicationIT {
+public class AbweichungServiceIT {
+
+  @Autowired
+  private AbweichungService abweichungService;
 
   @Test
-  public void contextLoads() {
+  public void whenSave_expectSaved() {
+    // arrange
+    final Abweichung abweichung = AbweichungTest.AbweichungBuilder.DEFAULT.withId(0).build();
+
+    // act
+    final Abweichung savedAbweichung = abweichungService.saveAbweichung(abweichung);
+
+    // assert
+    assertThat(savedAbweichung.getId()).isGreaterThan(0);
   }
 
 }

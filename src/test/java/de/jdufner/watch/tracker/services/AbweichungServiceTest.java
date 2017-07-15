@@ -32,19 +32,51 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-package de.jdufner.watch.tracker;
+package de.jdufner.watch.tracker.services;
 
+import de.jdufner.watch.tracker.businessobjects.Abweichung;
+import de.jdufner.watch.tracker.businessobjects.AbweichungTest;
+import de.jdufner.watch.tracker.repositories.AbweichungRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class TrackerApplicationIT {
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+/**
+ * @author Jürgen Dufner
+ * @since 0.0
+ */
+@RunWith(MockitoJUnitRunner.class)
+public class AbweichungServiceTest {
+
+  @InjectMocks
+  private AbweichungService abweichungService;
+
+  @Mock
+  private AbweichungRepository abweichungRepository;
 
   @Test
-  public void contextLoads() {
+  public void whenSave_expectSaved() {
+    // arrange
+    final Abweichung abweichung = AbweichungTest.AbweichungBuilder.DEFAULT.build();
+    when(abweichungRepository.save(any(Abweichung.class))).then(invocationOnMock -> {
+      Abweichung savedAbweichung = (Abweichung) invocationOnMock.getArguments()[0];
+      savedAbweichung.setId(1);
+      return savedAbweichung;
+    });
+
+    // act
+    final Abweichung savedAbweichung = abweichungService.saveAbweichung(abweichung);
+
+    // assert
+    verify(abweichungRepository).save(abweichung);
+    assertThat(savedAbweichung.getId()).isEqualTo(1);
   }
 
 }

@@ -32,19 +32,14 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-package de.jdufner.watch.tracker;
+package de.jdufner.watch.tracker.repositories;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import de.jdufner.watch.tracker.businessobjects.Abweichung;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class TrackerApplicationIT {
-
-  @Test
-  public void contextLoads() {
-  }
-
+/**
+ * @author Jürgen Dufner
+ * @since 0.0
+ */
+public interface AbweichungRepository extends PagingAndSortingRepository<Abweichung, Long> {
 }
