@@ -40,7 +40,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TrackerApplicationTests {
+public class TrackerApplicationIT {
 
   @Test
   public void contextLoads() {
