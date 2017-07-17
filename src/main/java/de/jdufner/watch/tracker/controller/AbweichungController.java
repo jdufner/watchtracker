@@ -35,6 +35,7 @@
 package de.jdufner.watch.tracker.controller;
 
 import de.jdufner.watch.tracker.businessobjects.Abweichung;
+import de.jdufner.watch.tracker.services.AbweichungService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -52,15 +53,23 @@ public class AbweichungController {
 
   private static final Logger log = LoggerFactory.getLogger(AbweichungController.class);
 
+  private final AbweichungService abweichungService;
+
+  public AbweichungController(final AbweichungService abweichungService) {
+    this.abweichungService = abweichungService;
+  }
+
   @GetMapping("/tracker")
   public String trackerForm(final Model model) {
     model.addAttribute("abweichung", new Abweichung());
     return "tracker";
   }
 
-  @PostMapping("/tracker")
-  public String trackerSubmit(@ModelAttribute final Abweichung abweichung) {
+  @PostMapping("/overview")
+  public String trackerSubmit(final Model model, @ModelAttribute final Abweichung abweichung) {
     log.debug("{}", abweichung);
+    abweichungService.saveAbweichung(abweichung);
+    model.addAttribute("abweichungen", abweichungService.findAbweichungen());
     return "overview";
   }
 

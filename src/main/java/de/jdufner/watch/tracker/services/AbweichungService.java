@@ -39,6 +39,8 @@ import de.jdufner.watch.tracker.repositories.AbweichungRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 /**
  * @author Jürgen Dufner
  * @since 0.0
@@ -54,7 +56,14 @@ public class AbweichungService {
 
   @Transactional
   public Abweichung saveAbweichung(final Abweichung abweichung) {
+    if (abweichung.getErfassungszeitpunkt() == null) {
+      abweichung.setErfassungszeitpunkt(new Date());
+    }
     return abweichungRepository.save(abweichung);
+  }
+
+  public Iterable<Abweichung> findAbweichungen() {
+    return abweichungRepository.findAll();
   }
 
 }
