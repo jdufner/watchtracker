@@ -65,10 +65,15 @@ public class AbweichungController {
     return "tracker";
   }
 
-  @PostMapping("/overview")
+  @PostMapping("/tracker")
   public String trackerSubmit(final Model model, @ModelAttribute final Abweichung abweichung) {
     log.debug("{}", abweichung);
     abweichungService.saveAbweichung(abweichung);
+    return "redirect:overview";
+  }
+
+  @GetMapping("/overview")
+  public String overview(final Model model) {
     model.addAttribute("abweichungen", abweichungService.findAbweichungen());
     return "overview";
   }

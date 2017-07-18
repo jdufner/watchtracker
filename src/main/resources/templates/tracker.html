@@ -41,7 +41,7 @@
 </head>
 <body>
 <h1>Erfassung</h1>
-<form action="#" th:action="@{/overview}" th:object="${abweichung}" method="post">
+<form action="#" th:action="@{/tracker}" th:object="${abweichung}" method="post">
     <p>Differenz: <input type="text" th:field="*{differenz}"/></p>
     <p>Korrektur: <input type="text" th:field="*{korrektur}"/></p>
     <p><input type="submit" value="Speichern"/><input type="reset" value="Abbrechen"/></p>
