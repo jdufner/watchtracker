@@ -36,15 +36,45 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="de">
 <head>
     <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Erfassung</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"></link>
 </head>
 <body>
-<h1>Erfassung</h1>
-<form action="#" th:action="@{/tracker}" th:object="${abweichung}" method="post">
-    <p>Differenz: <input type="text" th:field="*{differenz}"/></p>
-    <p>Korrektur: <input type="text" th:field="*{korrektur}"/></p>
-    <p><input type="submit" value="Speichern"/><input type="reset" value="Abbrechen"/></p>
-</form>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Erfassung</h1>
+        </div>
+    </div>
+    <form action="#" th:action="@{/tracker}" th:object="${abweichung}" method="post">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="differenz">Differenz:</label>
+                    <input id="differenz" class="form-control" type="text" th:field="*{differenz}"
+                           placeholder="Differenz"/>
+                </div>
+                <div class="form-group">
+                    <label for="korrektur">Korrektur:</label>
+                    <input id="korrektur" class="form-control" type="text" th:field="*{korrektur}"
+                           placeholder="Korrektur"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <input class="btn btn-primary" type="submit" value="Speichern"/>
+                <input class="btn btn-default" type="reset" value="Abbrechen"/>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery-1.12.4.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
 </body>
 </html>

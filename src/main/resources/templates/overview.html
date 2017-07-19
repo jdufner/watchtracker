@@ -36,22 +36,39 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="de">
 <head>
     <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Übersicht</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"></link>
 </head>
 <body>
-<h1>Übersicht</h1>
-<table>
-    <tr>
-        <th>Zeitpunkt</th>
-        <th>Differenz</th>
-        <th>Korrektur</th>
-    </tr>
-    <tr th:each="abweichung: ${abweichungen}">
-        <td th:text="${abweichung.erfassungszeitpunkt}">A</td>
-        <td th:text="${abweichung.differenz}">B</td>
-        <td th:text="${abweichung.korrektur}">C</td>
-    </tr>
-</table>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Übersicht</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <tr>
+                    <th>Zeitpunkt</th>
+                    <th>Differenz</th>
+                    <th>Korrektur</th>
+                </tr>
+                <tr th:each="abweichung: ${abweichungen}">
+                    <td th:text="${abweichung.erfassungszeitpunkt}">A</td>
+                    <td th:text="${abweichung.differenz}">B</td>
+                    <td th:text="${abweichung.korrektur}">C</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery-1.12.4.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
 </body>
 </html>
