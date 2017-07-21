@@ -62,8 +62,8 @@ public class Abweichung {
   private Date erfassungszeitpunkt;
 
   @NotNull
-  private int differenz;
+  private Integer differenz;
 
-  private int korrektur;
+  private Integer korrektur;
 
 }
