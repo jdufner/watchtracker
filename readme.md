@@ -8,3 +8,6 @@ können die Abweichungen und die Korrekturen aufgezeichnet werden.
 Die aufgezeichneten Daten können dann wieder dargestellt werden um die mittlere Abweichung über 
 einen längeren Zeitraum zu ermitteln.
 
+# Produktion
+
+`java -Dspring.profiles.active=file -jar tracker-<VERSION>.jar`
