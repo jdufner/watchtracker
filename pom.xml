@@ -504,6 +504,14 @@
     <developerConnection>scm:git:https://github.com/jdufner/watchtracker.git</developerConnection>
   </scm>
 
+  <distributionManagement>
+    <repository>
+      <id>local</id>
+      <name>local</name>
+      <url>file://D:/tmp</url>
+    </repository>
+  </distributionManagement>
+
   <developers>
     <developer>
       <id>jdufner</id>
