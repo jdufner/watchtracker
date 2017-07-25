@@ -505,7 +505,6 @@
   <scm>
     <connection>scm:git:git@github.com:jdufner/watchtracker.git</connection>
     <developerConnection>scm:git:git@github.com:jdufner/watchtracker.git</developerConnection>
-    <tag>HEAD</tag>
   </scm>
 
   <distributionManagement>
