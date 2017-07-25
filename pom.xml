@@ -487,9 +487,33 @@
     </profile>
   </profiles>
 
+  <licenses>
+    <license>
+      <name>GNU General Public License 3</name>
+      <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+    </license>
+  </licenses>
+
+  <issueManagement>
+    <url>https://github.com/jdufner/watchtracker/issues</url>
+    <system>GitHub Issues</system>
+  </issueManagement>
+
   <scm>
     <connection>scm:git:ssh://git@github.com:jdufner/watchtracker.git</connection>
     <developerConnection>scm:git:ssh://git@github.com:jdufner/watchtracker.git</developerConnection>
   </scm>
+
+  <developers>
+    <developer>
+      <id>jdufner</id>
+      <name>Jürgen Dufner</name>
+      <email>juergen@jdufner.de</email>
+      <timezone>Europe/Berlin</timezone>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+  </developers>
 
 </project>
