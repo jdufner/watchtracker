@@ -503,7 +503,7 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:git:ssh://git@github.com:jdufner/watchtracker.git</connection>
+    <connection>scm:git:git@github.com:jdufner/watchtracker.git</connection>
     <developerConnection>scm:git:git@github.com:jdufner/watchtracker.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
