@@ -504,7 +504,7 @@
 
   <scm>
     <connection>scm:git:ssh://git@github.com:jdufner/watchtracker.git</connection>
-    <developerConnection>scm:git:https://github.com/jdufner/watchtracker.git</developerConnection>
+    <developerConnection>scm:git:git@github.com:jdufner/watchtracker.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
