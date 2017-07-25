@@ -510,10 +510,15 @@
 
   <distributionManagement>
     <repository>
-      <id>tmp-repository</id>
-      <name>Local temporary repository</name>
-      <url>file://D:/tmp/repository</url>
+      <id>release-repository</id>
+      <name>Local release repository</name>
+      <url>file://D:/tmp/repository/release</url>
     </repository>
+    <snapshotRepository>
+      <id>snapshot-repository</id>
+      <name>Local snapshot repository</name>
+      <url>file://D:/tmp/repository/snapshot</url>
+    </snapshotRepository>
   </distributionManagement>
 
   <developers>
