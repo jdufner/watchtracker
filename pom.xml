@@ -510,8 +510,8 @@
 
   <distributionManagement>
     <repository>
-      <id>local</id>
-      <name>local</name>
+      <id>tmp-repository</id>
+      <name>Local temporary repository</name>
       <url>file://D:/tmp/repository</url>
     </repository>
   </distributionManagement>
