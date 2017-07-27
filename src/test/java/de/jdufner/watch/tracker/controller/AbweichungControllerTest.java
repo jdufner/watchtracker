@@ -35,7 +35,6 @@
 package de.jdufner.watch.tracker.controller;
 
 import de.jdufner.watch.tracker.services.AbweichungService;
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +43,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -64,11 +66,27 @@ public class AbweichungControllerTest {
   private AbweichungService abweichungService;
 
   @Test
-  public void test() throws Exception {
+  public void whenGetTracker_expectTracker() throws Exception {
+    mockMvc.perform(get("/tracker"))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString("Erfassung")));
+  }
+
+  @Test
+  public void whenPostTracker_expectOverview() throws Exception {
+    mockMvc.perform(post("/tracker"))
+        .andDo(print())
+        .andExpect(status().is3xxRedirection())
+        .andExpect(header().string("Location", containsString("overview")));
+  }
+
+  @Test
+  public void whenGetOverview_expectOverview() throws Exception {
     mockMvc.perform(get("/overview"))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(content().string(CoreMatchers.containsString("Übersicht")));
+        .andExpect(content().string(containsString("Übersicht")));
   }
 
 }
