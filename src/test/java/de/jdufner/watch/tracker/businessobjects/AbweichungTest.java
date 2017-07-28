@@ -49,7 +49,7 @@ public class AbweichungTest {
   @Test
   public void whenToString_expectString() {
     // arrange
-    final Abweichung abweichung = AbweichungBuilder.DEFAULT.build();
+    final Abweichung abweichung = AbweichungBuilder.defaultTestObjectBuilder().build();
 
     // act
     final String s = abweichung.toString();
@@ -61,7 +61,9 @@ public class AbweichungTest {
 
   public static class AbweichungBuilder {
 
-    public static AbweichungBuilder DEFAULT = new AbweichungBuilder().withId(1).withErfassungszeitpunkt(new Date(0)).withDifferenz(3).withKorrektur(0);
+    public static AbweichungBuilder defaultTestObjectBuilder() {
+      return new AbweichungBuilder().withId(1).withErfassungszeitpunkt(new Date(0)).withDifferenz(3).withKorrektur(0);
+    }
 
     private long id;
     private Date erfassungszeitpunkt;

@@ -58,7 +58,7 @@ public class AbweichungServiceIT {
   @Test
   public void whenSave_expectSaved() {
     // arrange
-    final Abweichung abweichung = AbweichungTest.AbweichungBuilder.DEFAULT.withId(0).build();
+    final Abweichung abweichung = AbweichungTest.AbweichungBuilder.defaultTestObjectBuilder().withId(0).build();
 
     // act
     final Abweichung savedAbweichung = abweichungService.saveAbweichung(abweichung);
