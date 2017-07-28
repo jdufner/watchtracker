@@ -62,7 +62,26 @@ public class AbweichungServiceTest {
   private AbweichungRepository abweichungRepository;
 
   @Test
-  public void whenSave_expectSaved() {
+  public void testSave_whenErfassungszeitpunktIsNull_expectErfassungszeitpunktIsSet() {
+    // arrange
+    final Abweichung abweichung = AbweichungTest.AbweichungBuilder.DEFAULT.withErfassungszeitpunkt(null).build();
+    when(abweichungRepository.save(any(Abweichung.class))).then(invocationOnMock -> {
+      Abweichung savedAbweichung = (Abweichung) invocationOnMock.getArguments()[0];
+      savedAbweichung.setId(1);
+      return savedAbweichung;
+    });
+
+    // act
+    final Abweichung savedAbweichung = abweichungService.saveAbweichung(abweichung);
+
+    // assert
+    verify(abweichungRepository).save(abweichung);
+    assertThat(savedAbweichung.getId()).isEqualTo(1);
+    assertThat(savedAbweichung.getErfassungszeitpunkt()).isNotNull();
+  }
+
+  @Test
+  public void testSave_whenErfassungszeitpunktIsSet_expectErfassungszeitpunktIsUnchanged() {
     // arrange
     final Abweichung abweichung = AbweichungTest.AbweichungBuilder.DEFAULT.build();
     when(abweichungRepository.save(any(Abweichung.class))).then(invocationOnMock -> {
@@ -77,6 +96,7 @@ public class AbweichungServiceTest {
     // assert
     verify(abweichungRepository).save(abweichung);
     assertThat(savedAbweichung.getId()).isEqualTo(1);
+    assertThat(savedAbweichung.getErfassungszeitpunkt()).isEqualTo(abweichung.getErfassungszeitpunkt());
   }
 
 }
