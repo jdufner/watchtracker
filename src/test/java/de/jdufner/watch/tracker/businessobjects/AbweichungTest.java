@@ -37,6 +37,7 @@ package de.jdufner.watch.tracker.businessobjects;
 import org.junit.Test;
 
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -55,8 +56,8 @@ public class AbweichungTest {
     final String s = abweichung.toString();
 
     // assert
-    // Funktioniert dieser Test auch in einer anderen Zeitzone?
-    assertThat(s).isEqualTo("Abweichung(id=1, erfassungszeitpunkt=Thu Jan 01 01:00:00 CET 1970, differenz=3, korrektur=0)");
+    // Funktioniert dieser Test auch in einer anderen Zeitzone? Nein, deshalb auf Pattern umstellen!
+    assertThat(s).containsPattern(Pattern.compile("Abweichung\\(id=1, erfassungszeitpunkt=.*, differenz=3, korrektur=0\\)"));
   }
 
   public static class AbweichungBuilder {
