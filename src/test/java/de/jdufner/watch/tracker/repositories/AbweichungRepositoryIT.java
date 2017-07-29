@@ -36,13 +36,14 @@ package de.jdufner.watch.tracker.repositories;
 
 import de.jdufner.watch.tracker.businessobjects.Abweichung;
 import de.jdufner.watch.tracker.businessobjects.AbweichungTest;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Jürgen Dufner
@@ -61,13 +62,13 @@ public class AbweichungRepositoryIT {
   @Test
   public void testFindAll() {
     // arrange
-    entityManager.persist(AbweichungTest.AbweichungBuilder.defaultTestObjectBuilder().build());
+    entityManager.merge(AbweichungTest.AbweichungBuilder.defaultTestObjectBuilder().build());
 
     // act
     Iterable<Abweichung> abweichungen = abweichungRepository.findAll();
 
     // assert
-    Assertions.assertThat(abweichungen).isNotNull().isNotEmpty();
+    assertThat(abweichungen).isNotNull().isNotEmpty();
   }
 
 }
