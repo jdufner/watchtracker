@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jdufner/watchtracker.svg?branch=master)](https://travis-ci.org/jdufner/watchtracker)
+
 # Watchtracker
 
 Der Watchtracker ist zur Aufzeichnung von Abweichungen der Uhrzeit deiner Armbanduhr möglich.
