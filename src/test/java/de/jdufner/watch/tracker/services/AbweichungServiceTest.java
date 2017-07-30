@@ -45,6 +45,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -97,6 +98,28 @@ public class AbweichungServiceTest {
     verify(abweichungRepository).save(abweichung);
     assertThat(savedAbweichung.getId()).isEqualTo(1);
     assertThat(savedAbweichung.getErfassungszeitpunkt()).isEqualTo(abweichung.getErfassungszeitpunkt());
+  }
+
+  @Test
+  public void testFindAbweichungen_whenCalled_expectRepositoryCalled() {
+    // arrange
+
+    // act
+    abweichungService.findAbweichungen();
+
+    // assert
+    verify(abweichungRepository).findAll();
+  }
+
+  @Test
+  public void testDelete_whenCalled_expectRepositoryCalled() {
+    // arrange
+
+    // act
+    abweichungService.deleteAbweichung(anyLong());
+
+    // assert
+    verify(abweichungRepository).delete(anyLong());
   }
 
 }
