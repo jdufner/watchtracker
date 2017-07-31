@@ -40,9 +40,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author Jürgen Dufner
@@ -66,7 +68,7 @@ public class AbweichungController {
   }
 
   @PostMapping("/tracker")
-  public String trackerSubmit(final Model model, @ModelAttribute final Abweichung abweichung) {
+  public String trackerSubmit(@ModelAttribute final Abweichung abweichung) {
     log.debug("{}", abweichung);
     abweichungService.saveAbweichung(abweichung);
     return "redirect:overview";
@@ -76,6 +78,13 @@ public class AbweichungController {
   public String overview(final Model model) {
     model.addAttribute("abweichungen", abweichungService.findAbweichungen());
     return "overview";
+  }
+
+  @DeleteMapping("/overview")
+  public String deleteAbweichung(@RequestParam(value = "abweichungId", required = true) final String abweichungId) {
+    log.debug("abweichungId={}", abweichungId);
+    abweichungService.deleteAbweichung(Long.parseLong(abweichungId));
+    return "redirect:overview";
   }
 
 }

@@ -66,4 +66,9 @@ public class AbweichungService {
     return abweichungRepository.findAll();
   }
 
+  @Transactional
+  public void deleteAbweichung(final long abweichungId) {
+    abweichungRepository.delete(abweichungId);
+  }
+
 }

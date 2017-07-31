@@ -44,6 +44,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -87,6 +88,14 @@ public class AbweichungControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().string(containsString("Übersicht")));
+  }
+
+  @Test
+  public void whenDeleteOverview_expectOverview() throws Exception {
+    mockMvc.perform(delete("/overview").param("abweichungId", "1"))
+        .andDo(print())
+        .andExpect(status().is3xxRedirection())
+        .andExpect(header().string("Location", containsString("overview")));
   }
 
 }
