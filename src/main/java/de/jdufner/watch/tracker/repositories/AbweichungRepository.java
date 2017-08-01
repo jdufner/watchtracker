@@ -37,9 +37,19 @@ package de.jdufner.watch.tracker.repositories;
 import de.jdufner.watch.tracker.businessobjects.Abweichung;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.Date;
+
 /**
  * @author Jürgen Dufner
  * @since 0.0
  */
 public interface AbweichungRepository extends PagingAndSortingRepository<Abweichung, Long> {
+
+  /**
+   * @param erfassungszeitpunkt
+   * @return the next older {@link Abweichung} than the given erfassungszeitpunkt
+   * @since 0.2
+   */
+  Abweichung findFirstByErfassungszeitpunktBeforeOrderByErfassungszeitpunktDesc(Date erfassungszeitpunkt);
+
 }

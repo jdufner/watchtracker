@@ -48,18 +48,34 @@ import java.util.Date;
 @Service
 public class AbweichungService {
 
-  private AbweichungRepository abweichungRepository;
+  private final AbweichungRepository abweichungRepository;
 
-  public AbweichungService(final AbweichungRepository abweichungRepository) {
+  private final AbweichungenErmittler abweichungenErmittler;
+
+  public AbweichungService(final AbweichungenErmittler abweichungenErmittler, final AbweichungRepository abweichungRepository) {
+    this.abweichungenErmittler = abweichungenErmittler;
     this.abweichungRepository = abweichungRepository;
   }
 
   @Transactional
   public Abweichung saveAbweichung(final Abweichung abweichung) {
+    vervollstaendigeDaten(abweichung);
+    return abweichungRepository.save(abweichung);
+  }
+
+  private void vervollstaendigeDaten(final Abweichung abweichung) {
+    vervollstaendigeErfassungszeitpunkt(abweichung);
+    vervollstaendigeAbweichungenProTag(abweichung);
+  }
+
+  private void vervollstaendigeAbweichungenProTag(final Abweichung abweichung) {
+
+  }
+
+  private void vervollstaendigeErfassungszeitpunkt(final Abweichung abweichung) {
     if (abweichung.getErfassungszeitpunkt() == null) {
       abweichung.setErfassungszeitpunkt(new Date());
     }
-    return abweichungRepository.save(abweichung);
   }
 
   public Iterable<Abweichung> findAbweichungen() {

@@ -32,43 +32,27 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-package de.jdufner.watch.tracker.businessobjects;
+package de.jdufner.watch.tracker.services;
 
-import lombok.Data;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
+import de.jdufner.watch.tracker.businessobjects.Abweichung;
+import de.jdufner.watch.tracker.repositories.AbweichungRepository;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Jürgen Dufner
- * @since 0.0
+ * @since 0.1
  */
-@Data
-@Entity
-public class Abweichung {
+@Service
+public class AbweichungenErmittler {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  private long id;
+  private final AbweichungRepository abweichungRepository;
 
-  @NotNull
-  @Column(unique = true)
-  private Date erfassungszeitpunkt;
+  public AbweichungenErmittler(final AbweichungRepository abweichungRepository) {
+    this.abweichungRepository = abweichungRepository;
+  }
 
-  @NotNull
-  private Integer differenz;
-
-  private Integer korrektur;
-
-  private Double abweichungProTagSeitLetzterMessung;
-
-  private Double abweichungProTagInLetzterWoche;
-
-  private Double abweichungProTagInLetztemMonat;
+  private Abweichung ermittleVorigeAbweichung(Abweichung abweichung) {
+    return abweichungRepository.findFirstByErfassungszeitpunktBeforeOrderByErfassungszeitpunktDesc(abweichung.getErfassungszeitpunkt());
+  }
 
 }

@@ -38,10 +38,14 @@ import de.jdufner.watch.tracker.businessobjects.Abweichung;
 import de.jdufner.watch.tracker.businessobjects.AbweichungTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -52,6 +56,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class AbweichungRepositoryIT {
+
+  private static final Logger log = LoggerFactory.getLogger(AbweichungRepositoryIT.class);
 
   @Autowired
   private TestEntityManager entityManager;
@@ -69,6 +75,22 @@ public class AbweichungRepositoryIT {
 
     // assert
     assertThat(abweichungen).isNotNull().isNotEmpty();
+  }
+
+  @Test
+  public void testFindFirstByErfassungszeitpunktBeforeOrderByErfassungszeitpunktDesc() {
+    // arrange
+    entityManager.merge(AbweichungTest.AbweichungBuilder.defaultTestObjectBuilder().withKorrektur(1).withErfassungszeitpunkt(new Date(1000000L)).build());
+    entityManager.merge(AbweichungTest.AbweichungBuilder.defaultTestObjectBuilder().withKorrektur(2).withErfassungszeitpunkt(new Date(2000000L)).build());
+    entityManager.merge(AbweichungTest.AbweichungBuilder.defaultTestObjectBuilder().withKorrektur(3).withErfassungszeitpunkt(new Date(3000000L)).build());
+
+
+    // act
+    Abweichung abweichung = abweichungRepository.findFirstByErfassungszeitpunktBeforeOrderByErfassungszeitpunktDesc(new Date(3000000L));
+
+    // assert
+    log.debug("{}", abweichung);
+    assertThat(abweichung.getKorrektur()).isEqualTo(2);
   }
 
 }
