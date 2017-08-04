@@ -50,10 +50,7 @@ public class AbweichungService {
 
   private final AbweichungRepository abweichungRepository;
 
-  private final AbweichungenErmittler abweichungenErmittler;
-
-  public AbweichungService(final AbweichungenErmittler abweichungenErmittler, final AbweichungRepository abweichungRepository) {
-    this.abweichungenErmittler = abweichungenErmittler;
+  public AbweichungService(final AbweichungRepository abweichungRepository) {
     this.abweichungRepository = abweichungRepository;
   }
 
@@ -69,7 +66,9 @@ public class AbweichungService {
   }
 
   private void vervollstaendigeAbweichungenProTag(final Abweichung abweichung) {
-
+    Abweichung vorigeAbweichung = abweichungRepository.findFirstByErfassungszeitpunktBeforeOrderByErfassungszeitpunktDesc(abweichung.getErfassungszeitpunkt());
+    Double abweichungProTagSeitLetzterMessung = abweichung.berechneAbweichungProTagSeitLetzterMessung(vorigeAbweichung);
+    abweichung.setAbweichungProTagSeitLetzterMessung(abweichungProTagSeitLetzterMessung);
   }
 
   private void vervollstaendigeErfassungszeitpunkt(final Abweichung abweichung) {

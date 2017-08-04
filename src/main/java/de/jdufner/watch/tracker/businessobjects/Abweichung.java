@@ -52,6 +52,8 @@ import java.util.Date;
 @Entity
 public class Abweichung {
 
+  private static final long tagInMillisekunden = 24 * 60 * 60 * 1000;
+
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private long id;
@@ -70,5 +72,23 @@ public class Abweichung {
   private Double abweichungProTagInLetzterWoche;
 
   private Double abweichungProTagInLetztemMonat;
+
+  public Double berechneAbweichungProTagSeitLetzterMessung(final Abweichung vorigeAbweichung) {
+    if (vorigeAbweichung == null) {
+      return null;
+    }
+    return (double) getKorrigierteDifferenz(vorigeAbweichung) * tagInMillisekunden / getDauerZwischenErfassungen(vorigeAbweichung);
+  }
+
+  private long getDauerZwischenErfassungen(final Abweichung vorigeAbweichung) {
+    return erfassungszeitpunkt.getTime() - vorigeAbweichung.getErfassungszeitpunkt().getTime();
+  }
+
+  private int getKorrigierteDifferenz(final Abweichung vorigeAbweichung) {
+    if (vorigeAbweichung.korrektur == null || vorigeAbweichung.korrektur == 0) {
+      return vorigeAbweichung.differenz - differenz;
+    }
+    return vorigeAbweichung.korrektur - differenz;
+  }
 
 }

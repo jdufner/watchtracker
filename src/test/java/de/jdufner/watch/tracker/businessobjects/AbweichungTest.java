@@ -56,8 +56,45 @@ public class AbweichungTest {
     final String s = abweichung.toString();
 
     // assert
-    // Funktioniert dieser Test auch in einer anderen Zeitzone? Nein, deshalb auf Pattern umstellen!
-    assertThat(s).containsPattern(Pattern.compile("Abweichung\\(id=1, erfassungszeitpunkt=.*, differenz=3, korrektur=0\\)"));
+    assertThat(s).containsPattern(Pattern.compile("Abweichung\\(id=1.*\\)"));
+  }
+
+  @Test
+  public void testBerechneAbweichungProTagSeitLetzterMessung_whenVorigeAbweichungIsNull_expectNull() {
+    // arrange
+    Abweichung abweichung = AbweichungBuilder.defaultTestObjectBuilder().build();
+
+    // act
+    Double abweichungProTag = abweichung.berechneAbweichungProTagSeitLetzterMessung(null);
+
+    // assert
+    assertThat(abweichungProTag).isNull();
+  }
+
+  @Test
+  public void testBerechneAbweichungProTagSeitLetzterMessung_whenVorigeAbweichungEineSekundeProStunde_expectVierungzwandzigProTag() {
+    // arrange
+    Abweichung vorigeAbweichung = new AbweichungBuilder().withErfassungszeitpunkt(new Date(1000000)).withDifferenz(1).build();
+    Abweichung abweichung = new AbweichungBuilder().withErfassungszeitpunkt(new Date(1000000 + 60 * 60 * 1000)).withDifferenz(0).build();
+
+    // act
+    Double abweichungProTag = abweichung.berechneAbweichungProTagSeitLetzterMessung(vorigeAbweichung);
+
+    // assert
+    assertThat(abweichungProTag).isEqualTo(24);
+  }
+
+  @Test
+  public void testBerechneAbweichungProTagSeitLetzterMessung_whenVorigeAbweichungEineSekundeProStundeMitKorrektur_expectVierungzwandzigProTag() {
+    // arrange
+    Abweichung vorigeAbweichung = new AbweichungBuilder().withErfassungszeitpunkt(new Date(1000000)).withDifferenz(10).withKorrektur(30).build();
+    Abweichung abweichung = new AbweichungBuilder().withErfassungszeitpunkt(new Date(1000000 + 60 * 60 * 1000)).withDifferenz(29).build();
+
+    // act
+    Double abweichungProTag = abweichung.berechneAbweichungProTagSeitLetzterMessung(vorigeAbweichung);
+
+    // assert
+    assertThat(abweichungProTag).isEqualTo(24);
   }
 
   public static class AbweichungBuilder {
