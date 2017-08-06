@@ -40,6 +40,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Jürgen Dufner
@@ -63,12 +64,21 @@ public class AbweichungService {
   private void vervollstaendigeDaten(final Abweichung abweichung) {
     vervollstaendigeErfassungszeitpunkt(abweichung);
     vervollstaendigeAbweichungenProTag(abweichung);
+    vervollstaendigeAbweichungenProWoche(abweichung);
   }
 
   private void vervollstaendigeAbweichungenProTag(final Abweichung abweichung) {
-    Abweichung vorigeAbweichung = abweichungRepository.findFirstByErfassungszeitpunktBeforeOrderByErfassungszeitpunktDesc(abweichung.getErfassungszeitpunkt());
-    Double abweichungProTagSeitLetzterMessung = abweichung.berechneAbweichungProTagSeitLetzterMessung(vorigeAbweichung);
+    final Abweichung vorigeAbweichung = abweichungRepository.findFirstByErfassungszeitpunktBeforeOrderByErfassungszeitpunktDesc(
+        abweichung.getErfassungszeitpunkt());
+    final Double abweichungProTagSeitLetzterMessung = abweichung.berechneAbweichungProTag(vorigeAbweichung);
     abweichung.setAbweichungProTagSeitLetzterMessung(abweichungProTagSeitLetzterMessung);
+  }
+
+  private void vervollstaendigeAbweichungenProWoche(final Abweichung abweichung) {
+    final List<Abweichung> abweichungen = abweichungRepository.findByErfassungszeitpunktAfterAndErfassungszeitpunktBeforeOrderByErfassungszeitpunktAsc(
+        abweichung.berechneErfassungszeitpunktVorEinerWoche(), abweichung.getErfassungszeitpunkt());
+    final Double abweichungProTagInLetzterWoche = abweichung.berechneAbweichungProTag(abweichungen);
+    abweichung.setAbweichungProTagInLetzterWoche(abweichungProTagInLetzterWoche);
   }
 
   private void vervollstaendigeErfassungszeitpunkt(final Abweichung abweichung) {

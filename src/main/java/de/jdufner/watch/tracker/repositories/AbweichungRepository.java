@@ -38,6 +38,7 @@ import de.jdufner.watch.tracker.businessobjects.Abweichung;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Jürgen Dufner
@@ -51,5 +52,13 @@ public interface AbweichungRepository extends PagingAndSortingRepository<Abweich
    * @since 0.2
    */
   Abweichung findFirstByErfassungszeitpunktBeforeOrderByErfassungszeitpunktDesc(Date erfassungszeitpunkt);
+
+  /**
+   * @param erfassungszeitpunktVon
+   * @param erfassungszeitpunktBis
+   * @return all {@link Abweichung}en between #erfassungszeitpunktVon and #erfassungszeitpunktBis
+   * @since 0.2
+   */
+  List<Abweichung> findByErfassungszeitpunktAfterAndErfassungszeitpunktBeforeOrderByErfassungszeitpunktAsc(Date erfassungszeitpunktVon, Date erfassungszeitpunktBis);
 
 }

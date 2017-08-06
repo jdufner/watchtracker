@@ -43,6 +43,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Jürgen Dufner
@@ -52,7 +54,9 @@ import java.util.Date;
 @Entity
 public class Abweichung {
 
-  private static final long tagInMillisekunden = 24 * 60 * 60 * 1000;
+  private static final long TAG_IN_MILLISEKUNDEN = 24 * 60 * 60 * 1000L;
+  private static final long WOCHE_IN_MILLISEKUNDEN = 7 * TAG_IN_MILLISEKUNDEN;
+  private static final long MONAT_IN_MILLISEKUNDEN = 4 * WOCHE_IN_MILLISEKUNDEN;
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -73,22 +77,63 @@ public class Abweichung {
 
   private Double abweichungProTagInLetztemMonat;
 
-  public Double berechneAbweichungProTagSeitLetzterMessung(final Abweichung vorigeAbweichung) {
+  public Date berechneErfassungszeitpunktVorEinerWoche() {
+    return new Date(getErfassungszeitpunkt().getTime() - Abweichung.WOCHE_IN_MILLISEKUNDEN);
+  }
+
+  public Double berechneAbweichungProTag(final Abweichung vorigeAbweichung) {
     if (vorigeAbweichung == null) {
       return null;
     }
-    return (double) getKorrigierteDifferenz(vorigeAbweichung) * tagInMillisekunden / getDauerZwischenErfassungen(vorigeAbweichung);
+    return (double) berechneKorrigierteDifferenz(vorigeAbweichung) * TAG_IN_MILLISEKUNDEN / berechneDauerZwischenErfassungen(vorigeAbweichung);
   }
 
-  private long getDauerZwischenErfassungen(final Abweichung vorigeAbweichung) {
+  public Double berechneAbweichungProTag(final List<Abweichung> abweichungen) {
+    if (abweichungen == null || abweichungen.isEmpty()) {
+      return null;
+    }
+    return (double) berechneKorrigierteDifferenz(abweichungen) * TAG_IN_MILLISEKUNDEN / berechneDauerZwischenErfassungen(abweichungen);
+  }
+
+  private Long berechneDauerZwischenErfassungen(final List<Abweichung> abweichungen) {
+    return erfassungszeitpunkt.getTime() - abweichungen.get(0).getErfassungszeitpunkt().getTime();
+  }
+
+  private Integer berechneKorrigierteDifferenz(final List<Abweichung> abweichungen) {
+    List<Pair> pairs = new LinkedList<>();
+    abweichungen.stream().reduce((abweichung1, abweichung2) -> {
+      pairs.add(new Pair(abweichung1, abweichung2));
+      return abweichung2;
+    });
+    return pairs.stream()
+        .mapToInt(pairOfAbweichungen -> pairOfAbweichungen.berechneKorrigierteDifferenz())
+        .sum();
+  }
+
+  private long berechneDauerZwischenErfassungen(final Abweichung vorigeAbweichung) {
     return erfassungszeitpunkt.getTime() - vorigeAbweichung.getErfassungszeitpunkt().getTime();
   }
 
-  private int getKorrigierteDifferenz(final Abweichung vorigeAbweichung) {
+  private int berechneKorrigierteDifferenz(final Abweichung vorigeAbweichung) {
     if (vorigeAbweichung.korrektur == null || vorigeAbweichung.korrektur == 0) {
       return vorigeAbweichung.differenz - differenz;
     }
     return vorigeAbweichung.korrektur - differenz;
+  }
+
+  private static class Pair {
+
+    private final Abweichung vorigeAbweichung;
+    private final Abweichung abweichung;
+
+    private Pair(Abweichung vorigeAbweichung, Abweichung abweichung) {
+      this.vorigeAbweichung = vorigeAbweichung;
+      this.abweichung = abweichung;
+    }
+
+    private int berechneKorrigierteDifferenz() {
+      return abweichung.berechneKorrigierteDifferenz(vorigeAbweichung);
+    }
   }
 
 }
