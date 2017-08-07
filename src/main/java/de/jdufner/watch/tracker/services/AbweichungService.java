@@ -40,6 +40,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Jürgen Dufner
@@ -48,7 +49,7 @@ import java.util.Date;
 @Service
 public class AbweichungService {
 
-  private AbweichungRepository abweichungRepository;
+  private final AbweichungRepository abweichungRepository;
 
   public AbweichungService(final AbweichungRepository abweichungRepository) {
     this.abweichungRepository = abweichungRepository;
@@ -56,10 +57,34 @@ public class AbweichungService {
 
   @Transactional
   public Abweichung saveAbweichung(final Abweichung abweichung) {
+    vervollstaendigeDaten(abweichung);
+    return abweichungRepository.save(abweichung);
+  }
+
+  private void vervollstaendigeDaten(final Abweichung abweichung) {
+    vervollstaendigeErfassungszeitpunkt(abweichung);
+    vervollstaendigeAbweichungenProTag(abweichung);
+    vervollstaendigeAbweichungenProWoche(abweichung);
+  }
+
+  private void vervollstaendigeAbweichungenProTag(final Abweichung abweichung) {
+    final Abweichung vorigeAbweichung = abweichungRepository.findFirstByErfassungszeitpunktBeforeOrderByErfassungszeitpunktDesc(
+        abweichung.getErfassungszeitpunkt());
+    final Double abweichungProTagSeitLetzterMessung = abweichung.berechneAbweichungProTag(vorigeAbweichung);
+    abweichung.setAbweichungProTagSeitLetzterMessung(abweichungProTagSeitLetzterMessung);
+  }
+
+  private void vervollstaendigeAbweichungenProWoche(final Abweichung abweichung) {
+    final List<Abweichung> abweichungen = abweichungRepository.findByErfassungszeitpunktAfterAndErfassungszeitpunktBeforeOrderByErfassungszeitpunktAsc(
+        abweichung.berechneErfassungszeitpunktVorEinerWoche(), abweichung.getErfassungszeitpunkt());
+    final Double abweichungProTagInLetzterWoche = abweichung.berechneAbweichungProTag(abweichungen);
+    abweichung.setAbweichungProTagInLetzterWoche(abweichungProTagInLetzterWoche);
+  }
+
+  private void vervollstaendigeErfassungszeitpunkt(final Abweichung abweichung) {
     if (abweichung.getErfassungszeitpunkt() == null) {
       abweichung.setErfassungszeitpunkt(new Date());
     }
-    return abweichungRepository.save(abweichung);
   }
 
   public Iterable<Abweichung> findAbweichungen() {

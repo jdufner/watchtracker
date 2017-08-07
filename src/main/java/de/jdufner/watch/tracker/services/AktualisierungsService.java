@@ -32,33 +32,44 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-package de.jdufner.watch.tracker.repositories;
+package de.jdufner.watch.tracker.services;
 
 import de.jdufner.watch.tracker.businessobjects.Abweichung;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import de.jdufner.watch.tracker.repositories.AbweichungRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
+import javax.annotation.PostConstruct;
 
 /**
  * @author Jürgen Dufner
- * @since 0.0
+ * @since 0.2
  */
-public interface AbweichungRepository extends PagingAndSortingRepository<Abweichung, Long> {
+@Service
+public class AktualisierungsService {
 
-  /**
-   * @param erfassungszeitpunkt
-   * @return the next older {@link Abweichung} than the given erfassungszeitpunkt
-   * @since 0.2
-   */
-  Abweichung findFirstByErfassungszeitpunktBeforeOrderByErfassungszeitpunktDesc(Date erfassungszeitpunkt);
+  private static final Logger log = LoggerFactory.getLogger(AktualisierungsService.class);
 
-  /**
-   * @param erfassungszeitpunktVon
-   * @param erfassungszeitpunktBis
-   * @return all {@link Abweichung}s between #erfassungszeitpunktVon and #erfassungszeitpunktBis
-   * @since 0.2
-   */
-  List<Abweichung> findByErfassungszeitpunktAfterAndErfassungszeitpunktBeforeOrderByErfassungszeitpunktAsc(Date erfassungszeitpunktVon, Date erfassungszeitpunktBis);
+  private AbweichungService abweichungService;
+  private AbweichungRepository abweichungRepository;
+  @Value("${updateData}")
+  private boolean updateData;
+
+  public AktualisierungsService(final AbweichungService abweichungService, final AbweichungRepository abweichungRepository) {
+    this.abweichungService = abweichungService;
+    this.abweichungRepository = abweichungRepository;
+  }
+
+  @PostConstruct
+  public void updateAll() {
+    if (updateData) {
+      for (final Abweichung abweichung : abweichungRepository.findAll(new Sort(Sort.Direction.ASC, "erfassungszeitpunkt"))) {
+        abweichungService.saveAbweichung(abweichung);
+      }
+    }
+  }
 
 }

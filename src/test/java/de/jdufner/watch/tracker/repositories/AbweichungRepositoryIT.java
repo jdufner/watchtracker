@@ -38,10 +38,15 @@ import de.jdufner.watch.tracker.businessobjects.Abweichung;
 import de.jdufner.watch.tracker.businessobjects.AbweichungTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Date;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -52,6 +57,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class AbweichungRepositoryIT {
+
+  private static final Logger log = LoggerFactory.getLogger(AbweichungRepositoryIT.class);
 
   @Autowired
   private TestEntityManager entityManager;
@@ -69,6 +76,40 @@ public class AbweichungRepositoryIT {
 
     // assert
     assertThat(abweichungen).isNotNull().isNotEmpty();
+  }
+
+  @Test
+  public void testFindFirstByErfassungszeitpunktBeforeOrderByErfassungszeitpunktDesc() {
+    // arrange
+    entityManager.merge(new AbweichungTest.AbweichungBuilder().withDifferenz(1).withErfassungszeitpunkt(new Date(1000000L)).build());
+    entityManager.merge(new AbweichungTest.AbweichungBuilder().withDifferenz(2).withErfassungszeitpunkt(new Date(2000000L)).build());
+    entityManager.merge(new AbweichungTest.AbweichungBuilder().withDifferenz(3).withErfassungszeitpunkt(new Date(3000000L)).build());
+
+
+    // act
+    Abweichung abweichung = abweichungRepository.findFirstByErfassungszeitpunktBeforeOrderByErfassungszeitpunktDesc(new Date(3000000L));
+
+    // assert
+    log.debug("{}", abweichung);
+    assertThat(abweichung.getDifferenz()).isEqualTo(2);
+  }
+
+  @Test
+  public void testFindFirstByErfassungszeitpunktAfterAndErfassungszeitpunktBeforeOrderByErfassungszeitpunktAsc() {
+    // arrange
+    entityManager.merge(new AbweichungTest.AbweichungBuilder().withDifferenz(1).withErfassungszeitpunkt(new Date(100000000L)).build());
+    entityManager.merge(new AbweichungTest.AbweichungBuilder().withDifferenz(2).withErfassungszeitpunkt(new Date(200000000L)).build());
+    entityManager.merge(new AbweichungTest.AbweichungBuilder().withDifferenz(3).withErfassungszeitpunkt(new Date(300000000L)).build());
+    entityManager.merge(new AbweichungTest.AbweichungBuilder().withDifferenz(4).withErfassungszeitpunkt(new Date(400000000L)).build());
+    entityManager.merge(new AbweichungTest.AbweichungBuilder().withDifferenz(5).withErfassungszeitpunkt(new Date(500000000L)).build());
+
+
+    // act
+    List<Abweichung> abweichungen = abweichungRepository.findByErfassungszeitpunktAfterAndErfassungszeitpunktBeforeOrderByErfassungszeitpunktAsc(new Date(200000000L - 10000), new Date(400000000L + 100000));
+
+    // assert
+    log.debug("{}", abweichungen);
+    assertThat(abweichungen).hasSize(3);
   }
 
 }

@@ -36,7 +36,9 @@ package de.jdufner.watch.tracker.businessobjects;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,8 +58,76 @@ public class AbweichungTest {
     final String s = abweichung.toString();
 
     // assert
-    // Funktioniert dieser Test auch in einer anderen Zeitzone? Nein, deshalb auf Pattern umstellen!
-    assertThat(s).containsPattern(Pattern.compile("Abweichung\\(id=1, erfassungszeitpunkt=.*, differenz=3, korrektur=0\\)"));
+    assertThat(s).containsPattern(Pattern.compile("Abweichung\\(id=1.*\\)"));
+  }
+
+  @Test
+  public void testBerechneErfassungszeitpunktVorEinerWoche_whenCall_expectResult() {
+    // arrange
+    long l = 1000000000000L;
+    Abweichung abweichung = new AbweichungBuilder().withErfassungszeitpunkt(new Date(l)).build();
+
+    // act
+    Date erfassungszeitpunktVorEinerWoche = abweichung.berechneErfassungszeitpunktVorEinerWoche();
+
+    // assert
+    assertThat(erfassungszeitpunktVorEinerWoche).isEqualTo(new Date(l - 7 * 24 * 60 * 60 * 1000));
+  }
+
+  @Test
+  public void testBerechneAbweichungProTag_whenVorigeAbweichungIsNull_expectNull() {
+    // arrange
+    Abweichung abweichung = AbweichungBuilder.defaultTestObjectBuilder().build();
+
+    // act
+    Double abweichungProTag = abweichung.berechneAbweichungProTag((Abweichung) null);
+
+    // assert
+    assertThat(abweichungProTag).isNull();
+  }
+
+  @Test
+  public void testBerechneAbweichungProTag_whenVorigeAbweichungEineSekundeProStunde_expectVierungzwandzigProTag() {
+    // arrange
+    Abweichung vorigeAbweichung = new AbweichungBuilder().withErfassungszeitpunkt(new Date(1000000)).withDifferenz(1).build();
+    Abweichung abweichung = new AbweichungBuilder().withErfassungszeitpunkt(new Date(1000000 + 60 * 60 * 1000)).withDifferenz(0).build();
+
+    // act
+    Double abweichungProTag = abweichung.berechneAbweichungProTag(vorigeAbweichung);
+
+    // assert
+    assertThat(abweichungProTag).isEqualTo(24);
+  }
+
+  @Test
+  public void testBerechneAbweichungProTag_whenVorigeAbweichungEineSekundeProStundeMitKorrektur_expectVierungzwanzigProTag() {
+    // arrange
+    Abweichung vorigeAbweichung = new AbweichungBuilder().withErfassungszeitpunkt(new Date(1000000)).withDifferenz(10).withKorrektur(30).build();
+    Abweichung abweichung = new AbweichungBuilder().withErfassungszeitpunkt(new Date(1000000 + 60 * 60 * 1000)).withDifferenz(29).build();
+
+    // act
+    Double abweichungProTag = abweichung.berechneAbweichungProTag(vorigeAbweichung);
+
+    // assert
+    assertThat(abweichungProTag).isEqualTo(24);
+  }
+
+  @Test
+  public void testBerechneAbweichungProTag_whenVorigeAbweichungJeweilsEineSekundeProStunde_expectVierundzwanzigProTag() {
+    // arrange
+    List<Abweichung> abweichungen = new ArrayList<>();
+    abweichungen.add(new AbweichungBuilder().withErfassungszeitpunkt(new Date(1000000)).withDifferenz(10).withKorrektur(30).build());
+    abweichungen.add(new AbweichungBuilder().withErfassungszeitpunkt(new Date(1000000 + 60 * 60 * 1000)).withDifferenz(29).build());
+    abweichungen.add(new AbweichungBuilder().withErfassungszeitpunkt(new Date(1000000 + 2 * 60 * 60 * 1000)).withDifferenz(28).build());
+    abweichungen.add(new AbweichungBuilder().withErfassungszeitpunkt(new Date(1000000 + 3 * 60 * 60 * 1000)).withDifferenz(27).build());
+    Abweichung abweichung = new AbweichungBuilder().withErfassungszeitpunkt(new Date(1000000 + 4 * 60 * 60 * 1000)).withDifferenz(26).build();
+    abweichungen.add(abweichung);
+
+    // act
+    Double abweichungProTag = abweichung.berechneAbweichungProTag(abweichungen);
+
+    // assert
+    assertThat(abweichungProTag).isEqualTo(24);
   }
 
   public static class AbweichungBuilder {
