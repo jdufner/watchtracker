@@ -12,4 +12,17 @@ einen längeren Zeitraum zu ermitteln.
 
 # Produktion
 
+## Aufruf der Applikation
+
 `java -Dspring.profiles.active=file -jar tracker-<VERSION>.jar`
+
+## Servicewrapper
+
+Reload Daemon
+`sudo systemctl daemon-reload`
+
+Starte Service
+`sudo systemctl start tracker.service`
+
+Stoppe Service
+`sudo systemctl stop tracker.service`
