@@ -39,7 +39,7 @@
 
   <groupId>de.jdufner.watch</groupId>
   <artifactId>tracker</artifactId>
-  <version>0.2.0</version>
+  <version>0.2.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>tracker</name>
@@ -504,7 +504,7 @@
   <scm>
     <connection>scm:git:git@github.com:jdufner/watchtracker.git</connection>
     <developerConnection>scm:git:git@github.com:jdufner/watchtracker.git</developerConnection>
-    <tag>tracker-0.2.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <distributionManagement>
