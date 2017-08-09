@@ -69,11 +69,11 @@
                     <th>Aktionen</th>
                 </tr>
                 <tr th:each="abweichung: ${abweichungen}">
-                    <td th:text="${abweichung.erfassungszeitpunkt}">A</td>
+                    <td th:text="${#dates.format(abweichung.erfassungszeitpunkt, 'dd.MM.yyyy HH:mm:ss')}">A</td>
                     <td th:text="${abweichung.differenz}">B</td>
                     <td th:text="${abweichung.korrektur}">C</td>
-                    <td th:text="${abweichung.abweichungProTagSeitLetzterMessung}"></td>
-                    <td th:text="${abweichung.abweichungProTagInLetzterWoche}"></td>
+                    <td th:text="${abweichung.abweichungProTagSeitLetzterMessung != null} ? ${#numbers.formatDecimal(abweichung.abweichungProTagSeitLetzterMessung, 1, 2)} : ''"></td>
+                    <td th:text="${abweichung.abweichungProTagInLetzterWoche != null} ? ${#numbers.formatDecimal(abweichung.abweichungProTagInLetzterWoche, 1, 2)} : ''"></td>
                     <td>
                         <form action="#" th:action="@{/overview}" th:method="DELETE">
                             <input type="hidden" th:name="abweichungId" th:value="${abweichung.id}"/>
