@@ -105,7 +105,7 @@ public class AbweichungServiceTest {
     // arrange
 
     // act
-    abweichungService.findAbweichungen();
+    abweichungService.findAbweichungen(0);
 
     // assert
     verify(abweichungRepository).findAll();

@@ -36,6 +36,10 @@ package de.jdufner.watch.tracker.services;
 
 import de.jdufner.watch.tracker.businessobjects.Abweichung;
 import de.jdufner.watch.tracker.repositories.AbweichungRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +52,9 @@ import java.util.List;
  */
 @Service
 public class AbweichungService {
+
+  @Value("${overview.page.size}")
+  private int seitengroesse;
 
   private final AbweichungRepository abweichungRepository;
 
@@ -87,8 +94,13 @@ public class AbweichungService {
     }
   }
 
-  public Iterable<Abweichung> findAbweichungen() {
-    return abweichungRepository.findAll();
+  public Page<Abweichung> findAbweichungen(final int seite) {
+    final PageRequest pageRequest = new PageRequest(seite, seitengroesse, new Sort(Sort.Direction.DESC, "erfassungszeitpunkt"));
+    return abweichungRepository.findAll(pageRequest);
+  }
+
+  public Long count() {
+    return abweichungRepository.count();
   }
 
   @Transactional

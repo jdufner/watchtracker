@@ -38,6 +38,7 @@ import de.jdufner.watch.tracker.businessobjects.Abweichung;
 import de.jdufner.watch.tracker.services.AbweichungService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -75,8 +76,11 @@ public class AbweichungController {
   }
 
   @GetMapping("/overview")
-  public String overview(final Model model) {
-    model.addAttribute("abweichungen", abweichungService.findAbweichungen());
+  public String overview(@RequestParam(value = "seite", required = false, defaultValue = "0") final int seite, final Model model) {
+    final Page<Abweichung> abweichungen = abweichungService.findAbweichungen(seite);
+    model.addAttribute("abweichungen", abweichungen);
+    log.debug("totalElement={}, totalPages={}, hasPrevious={}, hasNext={}",
+        abweichungen.getTotalElements(), abweichungen.getTotalPages(), abweichungen.hasPrevious(), abweichungen.hasNext());
     return "overview";
   }
 

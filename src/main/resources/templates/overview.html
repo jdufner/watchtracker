@@ -84,6 +84,50 @@
                     </td>
                 </tr>
             </table>
+            <nav aria-label="Page navigation" th:if="${abweichungen.getTotalElements() > 0}">
+                <ul class="pagination">
+                    <li th:class="${abweichungen.hasPrevious()}? 'enabled' : 'disabled'">
+                        <a th:href="'?seite=' + ${abweichungen.hasPrevious() ? abweichungen.getNumber() - 1 : abweichungen.getNumber()} + '#'"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li th:if="${abweichungen.getNumber() - 2 &gt;= 0}">
+                        <a th:href="'?seite=' + ${abweichungen.getNumber() - 2} + '#'"
+                           th:text="${abweichungen.getNumber() - 1}"> 1</a>
+                    </li>
+                    <li>
+                        <a th:if="${abweichungen.getNumber() - 1 &gt;= 0}"
+                           th:href="'?seite=' + ${abweichungen.getNumber() - 1} + '#'"
+                           th:text="${abweichungen.getNumber() }"> 2</a>
+                    </li>
+                    <li>
+                        <a th:href="'?seite=' + ${abweichungen.getNumber()} + '#'"
+                           th:text="${abweichungen.getNumber() + 1}"> 3</a>
+                    </li>
+                    <li th:if="${abweichungen.getNumber() + 1 &lt;= abweichungen.getTotalPages() - 1}">
+                        <a th:href="'?seite=' + ${abweichungen.getNumber() + 1} + '#'"
+                           th:text="${abweichungen.getNumber() + 2}"> 4</a>
+                    </li>
+                    <li th:if="${abweichungen.getNumber() + 2 &lt;= abweichungen.getTotalPages() - 1}">
+                        <a th:href="'?seite=' + ${abweichungen.getNumber() + 2} + '#'"
+                           th:text="${abweichungen.getNumber() + 3}"> 5</a>
+                    </li>
+                    <li th:if="${abweichungen.getNumber() + 3 &lt;= abweichungen.getTotalPages() - 1}">
+                        <a th:href="'?seite=' + ${abweichungen.getNumber() + 3} + '#'">..</a>
+                    </li>
+                    <li th:if="${abweichungen.getNumber() + 4 &lt;= abweichungen.getTotalPages() - 1}">
+                        <a th:href="'?seite=' + ${abweichungen.getTotalPages() - 1} + '#'"
+                           th:text="${abweichungen.getTotalPages()}">10</a>
+                    </li>
+                    <li th:class="${abweichungen.hasNext()}? 'enabled' : 'disabled'">
+                        <a th:href="'?seite=' + ${abweichungen.hasNext() ? abweichungen.getNumber() + 1 : abweichungen.getNumber()} + '#'"
+                           aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
