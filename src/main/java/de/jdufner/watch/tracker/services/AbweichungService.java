@@ -54,7 +54,7 @@ import java.util.List;
 public class AbweichungService {
 
   @Value("${overview.page.size}")
-  private int seitengroesse;
+  private int seitengroesse = 10;
 
   private final AbweichungRepository abweichungRepository;
 

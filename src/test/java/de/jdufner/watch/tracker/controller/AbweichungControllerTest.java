@@ -34,16 +34,23 @@
 
 package de.jdufner.watch.tracker.controller;
 
+import de.jdufner.watch.tracker.businessobjects.Abweichung;
 import de.jdufner.watch.tracker.services.AbweichungService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Iterator;
+
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -84,6 +91,12 @@ public class AbweichungControllerTest {
 
   @Test
   public void whenGetOverview_expectOverview() throws Exception {
+    // arrange
+    Page<Abweichung> page = mock(Page.class);
+    when(page.iterator()).thenReturn((Iterator<Abweichung>) mock(Iterator.class));
+    when(abweichungService.findAbweichungen(anyInt())).thenReturn(page);
+
+    // act + assert
     mockMvc.perform(get("/overview"))
         .andDo(print())
         .andExpect(status().isOk())

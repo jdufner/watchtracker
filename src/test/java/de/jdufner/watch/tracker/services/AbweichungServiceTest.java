@@ -42,6 +42,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.data.domain.PageRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -108,7 +109,7 @@ public class AbweichungServiceTest {
     abweichungService.findAbweichungen(0);
 
     // assert
-    verify(abweichungRepository).findAll();
+    verify(abweichungRepository).findAll(any(PageRequest.class));
   }
 
   @Test
