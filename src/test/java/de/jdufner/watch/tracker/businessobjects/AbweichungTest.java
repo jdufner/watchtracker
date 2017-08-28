@@ -96,7 +96,7 @@ public class AbweichungTest {
     Double abweichungProTag = abweichung.berechneAbweichungProTag(vorigeAbweichung);
 
     // assert
-    assertThat(abweichungProTag).isEqualTo(24);
+    assertThat(abweichungProTag).isEqualTo(-24);
   }
 
   @Test
@@ -109,7 +109,7 @@ public class AbweichungTest {
     Double abweichungProTag = abweichung.berechneAbweichungProTag(vorigeAbweichung);
 
     // assert
-    assertThat(abweichungProTag).isEqualTo(24);
+    assertThat(abweichungProTag).isEqualTo(-24);
   }
 
   @Test
@@ -127,7 +127,7 @@ public class AbweichungTest {
     Double abweichungProTag = abweichung.berechneAbweichungProTag(abweichungen);
 
     // assert
-    assertThat(abweichungProTag).isEqualTo(24);
+    assertThat(abweichungProTag).isEqualTo(-24);
   }
 
   public static class AbweichungBuilder {

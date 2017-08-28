@@ -116,9 +116,9 @@ public class Abweichung {
 
   private int berechneKorrigierteDifferenz(final Abweichung vorigeAbweichung) {
     if (vorigeAbweichung.korrektur == null || vorigeAbweichung.korrektur == 0) {
-      return vorigeAbweichung.differenz - differenz;
+      return differenz - vorigeAbweichung.differenz;
     }
-    return vorigeAbweichung.korrektur - differenz;
+    return differenz - vorigeAbweichung.korrektur;
   }
 
   private static class Pair {
