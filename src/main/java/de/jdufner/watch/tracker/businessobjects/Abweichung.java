@@ -126,7 +126,7 @@ public class Abweichung {
     private final Abweichung vorigeAbweichung;
     private final Abweichung abweichung;
 
-    private Pair(Abweichung vorigeAbweichung, Abweichung abweichung) {
+    private Pair(final Abweichung vorigeAbweichung, final Abweichung abweichung) {
       this.vorigeAbweichung = vorigeAbweichung;
       this.abweichung = abweichung;
     }

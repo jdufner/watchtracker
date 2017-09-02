@@ -54,7 +54,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AbweichungController {
 
-  private static final Logger log = LoggerFactory.getLogger(AbweichungController.class);
+  private static final Logger LOG = LoggerFactory.getLogger(AbweichungController.class);
 
   private final AbweichungService abweichungService;
 
@@ -70,7 +70,7 @@ public class AbweichungController {
 
   @PostMapping("/tracker")
   public String trackerSubmit(@ModelAttribute final Abweichung abweichung) {
-    log.debug("{}", abweichung);
+    LOG.debug("{}", abweichung);
     abweichungService.saveAbweichung(abweichung);
     return "redirect:overview";
   }
@@ -79,14 +79,14 @@ public class AbweichungController {
   public String overview(@RequestParam(value = "seite", required = false, defaultValue = "0") final int seite, final Model model) {
     final Page<Abweichung> abweichungen = abweichungService.findAbweichungen(seite);
     model.addAttribute("abweichungen", abweichungen);
-    log.debug("totalElement={}, totalPages={}, hasPrevious={}, hasNext={}",
+    LOG.debug("totalElement={}, totalPages={}, hasPrevious={}, hasNext={}",
         abweichungen.getTotalElements(), abweichungen.getTotalPages(), abweichungen.hasPrevious(), abweichungen.hasNext());
     return "overview";
   }
 
   @DeleteMapping("/overview")
   public String deleteAbweichung(@RequestParam(value = "abweichungId", required = true) final String abweichungId) {
-    log.debug("abweichungId={}", abweichungId);
+    LOG.debug("abweichungId={}", abweichungId);
     abweichungService.deleteAbweichung(Long.parseLong(abweichungId));
     return "redirect:overview";
   }
