@@ -49,8 +49,8 @@ import javax.annotation.PostConstruct;
 @Service
 public class AktualisierungsService {
 
-  private AbweichungService abweichungService;
-  private AbweichungRepository abweichungRepository;
+  private final AbweichungService abweichungService;
+  private final AbweichungRepository abweichungRepository;
   @Value("${updateData}")
   private boolean updateData;
 
