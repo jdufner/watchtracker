@@ -18,6 +18,9 @@ einen längeren Zeitraum zu ermitteln.
 
 ## Servicewrapper
 
+Service editieren
+`sudo vi /etc/systemd/system/tracker.service`
+
 Reload Daemon
 `sudo systemctl daemon-reload`
 

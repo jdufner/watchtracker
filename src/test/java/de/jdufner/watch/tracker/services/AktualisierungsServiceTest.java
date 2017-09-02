@@ -36,36 +36,63 @@ package de.jdufner.watch.tracker.services;
 
 import de.jdufner.watch.tracker.businessobjects.Abweichung;
 import de.jdufner.watch.tracker.repositories.AbweichungRepository;
-import org.springframework.beans.factory.annotation.Value;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
-import javax.annotation.PostConstruct;
+import java.lang.reflect.Field;
+import java.util.Collections;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Jürgen Dufner
  * @since 0.2
  */
-@Service
-public class AktualisierungsService {
+@RunWith(MockitoJUnitRunner.class)
+public class AktualisierungsServiceTest {
 
+  @InjectMocks
+  private AktualisierungsService cut;
+
+  @Mock
   private AbweichungService abweichungService;
+  @Mock
   private AbweichungRepository abweichungRepository;
-  @Value("${updateData}")
-  private boolean updateData;
 
-  public AktualisierungsService(final AbweichungService abweichungService, final AbweichungRepository abweichungRepository) {
-    this.abweichungService = abweichungService;
-    this.abweichungRepository = abweichungRepository;
+  @Test
+  public void testUpdateAll_whenUpdateData_expectAbweichungServiceCalled() {
+    // arrange
+    Field updateData = ReflectionUtils.findField(AktualisierungsService.class, "updateData");
+    ReflectionUtils.makeAccessible(updateData);
+    ReflectionUtils.setField(updateData, cut, true);
+    when(abweichungRepository.findAll(any(Sort.class))).thenReturn(Collections.singletonList(mock(Abweichung.class)));
+
+    // act
+    cut.updateAll();
+
+    // assert
+    verify(abweichungService).saveAbweichung(any(Abweichung.class));
   }
 
-  @PostConstruct
-  public void updateAll() {
-    if (updateData) {
-      for (final Abweichung abweichung : abweichungRepository.findAll(new Sort(Sort.Direction.ASC, "erfassungszeitpunkt"))) {
-        abweichungService.saveAbweichung(abweichung);
-      }
-    }
+  @Test
+  public void testUpdateAll_whenNotUpdateData_expectAbweichungServiceNotCalled() {
+    // arrange
+    when(abweichungRepository.findAll(any(Sort.class))).thenReturn(Collections.singletonList(mock(Abweichung.class)));
+
+    // act
+    cut.updateAll();
+
+    // assert
+    verify(abweichungService, times(0)).saveAbweichung(any(Abweichung.class));
   }
 
 }
