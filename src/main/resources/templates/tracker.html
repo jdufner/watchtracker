@@ -62,20 +62,20 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="differenz">Differenz:</label>
-                    <input id="differenz" class="form-control" type="text" th:field="*{differenz}"
+                    <input id="differenz" class="form-control" type="number" th:field="*{differenz}"
                            placeholder="Differenz"/>
                 </div>
                 <div class="form-group">
                     <label for="korrektur">Korrektur:</label>
-                    <input id="korrektur" class="form-control" type="text" th:field="*{korrektur}"
+                    <input id="korrektur" class="form-control" type="number" th:field="*{korrektur}"
                            placeholder="Korrektur"/>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <input class="btn btn-primary" type="submit" value="Speichern"/>
-                <input class="btn btn-default" type="reset" value="Abbrechen"/>
+                <input id="submit" class="btn btn-primary disabled" disabled="true" type="submit" value="Speichern"/>
+                <input id="reset" class="btn btn-default" type="reset" value="Abbrechen"/>
             </div>
         </div>
     </form>
@@ -84,5 +84,19 @@
 <script src="js/jquery-1.12.4.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="js/bootstrap.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $("#differenz").on("change keyup", function() {
+      if ($("#differenz").val().match(/^\d+$/)) {
+        $("#submit").removeClass("disabled");
+        $("#submit").prop("disabled", false);
+      } else {
+        $("#submit").addClass("disabled");
+        $("#submit").prop("disabled", true);
+      }
+    });
+  });
+
+</script>
 </body>
 </html>
