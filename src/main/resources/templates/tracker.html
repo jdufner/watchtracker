@@ -60,12 +60,12 @@
     <form action="#" th:action="@{/tracker}" th:object="${abweichung}" th:method="POST">
         <div class="row">
             <div class="col-md-12">
-                <div class="form-group">
+                <div id="differenzDiv" class="form-group">
                     <label for="differenz">Differenz:</label>
                     <input id="differenz" class="form-control" type="number" th:field="*{differenz}"
                            placeholder="Differenz"/>
                 </div>
-                <div class="form-group">
+                <div id="korrekturDiv" class="form-group">
                     <label for="korrektur">Korrektur:</label>
                     <input id="korrektur" class="form-control" type="number" th:field="*{korrektur}"
                            placeholder="Korrektur"/>
@@ -86,17 +86,45 @@
 <script src="js/bootstrap.min.js"></script>
 <script>
   $(document).ready(function() {
-    $("#differenz").on("change keyup", function() {
-      if ($("#differenz").val().match(/^\d+$/)) {
-        $("#submit").removeClass("disabled");
-        $("#submit").prop("disabled", false);
-      } else {
-        $("#submit").addClass("disabled");
-        $("#submit").prop("disabled", true);
-      }
-    });
+    var differenzForm = (function() {
+      var differenz = $("#differenz");
+      var differenzDiv = $("#differenzDiv");
+      var submit = $("#submit");
+      var isValid = function() {
+        return differenz.val().match(/^\-?\d+$/);
+      };
+      var disableSubmit = function() {
+        submit.addClass("disabled");
+        submit.prop("disabled", true);
+      };
+      var enableSubmit = function() {
+        submit.removeClass("disabled");
+        submit.prop("disabled", false);
+      };
+      var showError = function() {
+        differenzDiv.addClass("has-error");
+      };
+      var hideError = function() {
+        differenzDiv.removeClass("has-error");
+      };
+      var handleEvent = function() {
+        if (isValid()) {
+          enableSubmit();
+          hideError();
+        } else {
+          disableSubmit();
+          showError();
+        }
+      };
+      var bindEvent = function() {
+        differenz.on("change keyup", handleEvent);
+      };
+      return {
+        bindEvent: bindEvent
+      };
+    })();
+    differenzForm.bindEvent();
   });
-
 </script>
 </body>
 </html>
