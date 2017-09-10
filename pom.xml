@@ -43,7 +43,7 @@
   <packaging>jar</packaging>
 
   <name>tracker</name>
-  <description>Web application to track differences from your watch to the real time.</description>
+  <description>Web application to track differences from your watch to the actual time.</description>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
