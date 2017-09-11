@@ -58,24 +58,30 @@
         </div>
     </div>
     <form action="#" th:action="@{/tracker}" th:object="${abweichung}" th:method="POST">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="differenz">Differenz:</label>
-                    <input id="differenz" class="form-control" type="text" th:field="*{differenz}"
-                           placeholder="Differenz"/>
-                </div>
-                <div class="form-group">
-                    <label for="korrektur">Korrektur:</label>
-                    <input id="korrektur" class="form-control" type="text" th:field="*{korrektur}"
-                           placeholder="Korrektur"/>
-                </div>
+        <div id="differenzDiv" class="row form-horizontal form-group">
+            <label for="differenz" class="col-md-2 control-label">Differenz:</label>
+            <div class="col-md-10">
+                <input id="differenz" class="form-control" type="text" th:field="*{differenz}"
+                       required="true" placeholder="Differenz"/>
+            </div>
+            <div id="differenzHelp" class="col-md-10 col-md-offset-2 help-block" style="display: none;">
+                Ein ganzzahliger Wert muss in Differenz eingegeben werden.
+            </div>
+        </div>
+        <div id="korrekturDiv" class="row form-horizontal form-group">
+            <label for="korrektur" class="col-md-2 control-label">Korrektur:</label>
+            <div class="col-md-10">
+                <input id="korrektur" class="form-control" type="text" th:field="*{korrektur}"
+                       placeholder="Korrektur"/>
+            </div>
+            <div id="korrekturHelp" class="col-md-10 col-md-offset-2 help-block" style="display: none;">
+                Ein ganzzahliger Wert muss in Korrektur eingegeben werden.
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <input class="btn btn-primary" type="submit" value="Speichern"/>
-                <input class="btn btn-default" type="reset" value="Abbrechen"/>
+                <input id="submit" class="btn btn-primary disabled" disabled="true" type="submit" value="Speichern"/>
+                <input id="reset" class="btn btn-default" type="reset" value="Abbrechen"/>
             </div>
         </div>
     </form>
@@ -84,5 +90,71 @@
 <script src="js/jquery-1.12.4.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="js/bootstrap.min.js"></script>
+<script>
+//<![CDATA[
+  $(document).ready(function() {
+    var form = (function() {
+      var differenz = $("#differenz");
+      var differenzDiv = $("#differenzDiv");
+      var differenzHelp = $("#differenzHelp");
+      var korrektur = $("#korrektur");
+      var korrekturDiv = $("#korrekturDiv");
+      var korrekturHelp = $("#korrekturHelp")
+      var submit = $("#submit");
+      var disableSubmit = function() {
+        submit.addClass("disabled");
+        submit.prop("disabled", true);
+      };
+      var enableSubmit = function() {
+        submit.removeClass("disabled");
+        submit.prop("disabled", false);
+      };
+      var switchSubmit = function() {
+        if (isDifferenzValid() && isKorrekturValid()) {
+          enableSubmit();
+        } else {
+          disableSubmit();
+        }
+      }
+      var showError = function(div, help) {
+        div.addClass("has-error");
+        help.show();
+      };
+      var hideError = function(div, help) {
+        div.removeClass("has-error");
+        help.hide();
+      };
+      var handleEvent = function(isValid, div, help) {
+        if (isValid()) {
+          hideError(div, help);
+        } else {
+          showError(div, help);
+        }
+        switchSubmit();
+      };
+      var isDifferenzValid = function() {
+        return differenz.val().match(/^\-?\d+$/);
+      };
+      var handleDifferenzEvent = function() {
+        handleEvent(isDifferenzValid, differenzDiv, differenzHelp);
+      }
+      var isKorrekturValid = function() {
+        return korrektur.val().match(/^\-?\d*$/);
+      };
+      var handleKorrekturEvent = function() {
+        handleEvent(isKorrekturValid, korrekturDiv, korrekturHelp);
+      }
+      var bindEvents = function() {
+        differenz.on("change keyup", handleDifferenzEvent);
+        korrektur.on("change keyup", handleKorrekturEvent);
+      };
+      return {
+        bindEvents: bindEvents
+      };
+    })();
+    form.bindEvents();
+  });
+//]]>
+</script>
 </body>
 </html>
