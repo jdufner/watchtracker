@@ -16,7 +16,7 @@
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with Watchtracker.  If not, see <http://www.gnu.org/licenses />.
+  ~ along with Watchtracker.  If not, see <http://www.gnu.org/licenses/>.
   ~
   ~ Diese Datei ist Teil von Watchtracker.
   ~
@@ -31,26 +31,24 @@
   ~ Siehe die GNU General Public License für weitere Details.
   ~
   ~ Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
-  ~ Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses />.
+  ~ Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
+  ~
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>de.jdufner.watch</groupId>
-  <artifactId>tracker</artifactId>
+  <artifactId>watchtracker</artifactId>
   <version>0.3.2-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <modules>
+    <module>tracker</module>
+    <module>metadataextractor</module>
+  </modules>
+  <packaging>pom</packaging>
 
-  <name>tracker</name>
+  <name>watchtracker</name>
   <description>Web application to track differences from your watch to the actual time.</description>
-
-  <parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.4.RELEASE</version>
-    <relativePath /> <!-- lookup parent from repository -->
-  </parent>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -70,6 +68,19 @@
     <sonar.jacoco.itReportPath>${jacoco.outputDir}/${jacoco.out.it.file}</sonar.jacoco.itReportPath>
     <sonar.jacoco.reportPaths>${jacoco.outputDir}/${jacoco.out.ut.file}, ${jacoco.outputDir}/${jacoco.out.it.file}</sonar.jacoco.reportPaths>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <!-- Import dependency management from Spring Boot -->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>1.5.7.RELEASE</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -362,7 +373,7 @@
               <failOnViolation>false</failOnViolation>
               <failurePriority>4</failurePriority>
               <rulesets>
-                <ruleset>${pom.basedir}/ruleset.xml</ruleset>
+                <ruleset>${pom.basedir}/../ruleset.xml</ruleset>
               </rulesets>
             </configuration>
           </plugin>
