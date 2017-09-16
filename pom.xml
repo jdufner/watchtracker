@@ -35,12 +35,14 @@
   ~
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>de.jdufner.watch</groupId>
   <artifactId>watchtracker</artifactId>
   <version>0.3.2-SNAPSHOT</version>
+
   <modules>
     <module>tracker</module>
     <module>metadataextractor</module>
@@ -66,7 +68,8 @@
     <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
     <sonar.jacoco.reportPath>${jacoco.outputDir}/${jacoco.out.ut.file}</sonar.jacoco.reportPath>
     <sonar.jacoco.itReportPath>${jacoco.outputDir}/${jacoco.out.it.file}</sonar.jacoco.itReportPath>
-    <sonar.jacoco.reportPaths>${jacoco.outputDir}/${jacoco.out.ut.file}, ${jacoco.outputDir}/${jacoco.out.it.file}</sonar.jacoco.reportPaths>
+    <sonar.jacoco.reportPaths>${jacoco.outputDir}/${jacoco.out.ut.file}, ${jacoco.outputDir}/${jacoco.out.it.file}
+    </sonar.jacoco.reportPaths>
   </properties>
 
   <dependencyManagement>
@@ -130,7 +133,6 @@
       <version>3.8.0</version>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
 
   <build>
@@ -337,11 +339,11 @@
               <checkstyleRules>
                 <module name="Checker">
                   <module name="LineLength">
-                    <property name="max" value="132" />
+                    <property name="max" value="132"/>
                   </module>
                   <module name="TreeWalker">
                     <module name="LineLength">
-                      <property name="max" value="132" />
+                      <property name="max" value="132"/>
                     </module>
                   </module>
                 </module>
