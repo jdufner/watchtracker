@@ -32,7 +32,7 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-package de.jdufner.watchtracker.metadataextractor;
+package de.jdufner.watchtracker.metadataextractor.service.service;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -40,26 +40,27 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
+import de.jdufner.watchtracker.metadataextractor.configuration.MetadataextractorProperties;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
 
 /**
  * @author Jürgen Dufner
- * @since 0.2
+ * @since 0.3
  */
+@Component
 public class AufnahmedatumLeser {
 
-  public String leseOriginalZeitstempel(final File file) throws ImageProcessingException, IOException {
-    return getDateStringFromMetadata(file, Datum.ORIGINALZEITSTEMPEL);
+  private MetadataextractorProperties metadataextractorProperties;
+
+  public AufnahmedatumLeser(final MetadataextractorProperties metadataextractorProperties) {
+    this.metadataextractorProperties = metadataextractorProperties;
   }
 
-  public String leseDigitalisierungsZeitstempel(final File file) throws ImageProcessingException, IOException {
-    return getDateStringFromMetadata(file, Datum.DIGITALISIERUNGSZEITSTEMPEL);
-  }
-
-  public String leseZeitstempel(final File file) throws ImageProcessingException, IOException {
-    return getDateStringFromMetadata(file, Datum.ZEITSTEMPEL);
+  public String leseZeitstempelNachConfiguration(final File file) throws ImageProcessingException, IOException {
+    return getDateStringFromMetadata(file, Datum.valueOf(metadataextractorProperties.getTimestamp()));
   }
 
   private String getDateStringFromMetadata(final File file, final Datum datum) throws ImageProcessingException, IOException {

@@ -32,28 +32,42 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-package de.jdufner.watchtracker.metadataextractor;
+package de.jdufner.watchtracker.metadataextractor.service;
 
+import de.jdufner.watchtracker.metadataextractor.configuration.MetadataextractorProperties;
+import de.jdufner.watchtracker.metadataextractor.service.service.AufnahmedatumLeser;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
+
+import static org.mockito.Mockito.when;
 
 /**
  * @author Jürgen Dufner
  * @since 0.3
  */
+@RunWith(MockitoJUnitRunner.class)
 public class AufnahmedatumLeserTest {
 
-  private AufnahmedatumLeser aufnahmedatumLeser = new AufnahmedatumLeser();
+  @InjectMocks
+  private AufnahmedatumLeser aufnahmedatumLeser;
+
+  @Mock
+  private MetadataextractorProperties metadataextractorProperties;
 
   @Test
   public void testLeseOriginalZeitstempel() throws Exception {
     // arrange
     final File file = new File("src/test/resources/Sonnenblume.jpg");
+    when(metadataextractorProperties.getTimestamp()).thenReturn("ORIGINALZEITSTEMPEL");
 
     // act
-    String aufnahmedatum = aufnahmedatumLeser.leseOriginalZeitstempel(file);
+    String aufnahmedatum = aufnahmedatumLeser.leseZeitstempelNachConfiguration(file);
 
     // assert
     Assert.assertEquals("2017:07:29 13:08:54", aufnahmedatum);
@@ -63,9 +77,10 @@ public class AufnahmedatumLeserTest {
   public void testLeseDigitalisierungsZeitstempel() throws Exception {
     // arrange
     final File file = new File("src/test/resources/Sonnenblume.jpg");
+    when(metadataextractorProperties.getTimestamp()).thenReturn("DIGITALISIERUNGSZEITSTEMPEL");
 
     // act
-    String aufnahmedatum = aufnahmedatumLeser.leseDigitalisierungsZeitstempel(file);
+    String aufnahmedatum = aufnahmedatumLeser.leseZeitstempelNachConfiguration(file);
 
     // assert
     Assert.assertEquals("2017:07:29 13:08:54", aufnahmedatum);
@@ -75,9 +90,10 @@ public class AufnahmedatumLeserTest {
   public void testLeseZeitstempel() throws Exception {
     // arrange
     final File file = new File("src/test/resources/Sonnenblume.jpg");
+    when(metadataextractorProperties.getTimestamp()).thenReturn("ZEITSTEMPEL");
 
     // act
-    String aufnahmedatum = aufnahmedatumLeser.leseZeitstempel(file);
+    String aufnahmedatum = aufnahmedatumLeser.leseZeitstempelNachConfiguration(file);
 
     // assert
     Assert.assertEquals("2017:09:16 22:37:02", aufnahmedatum);
