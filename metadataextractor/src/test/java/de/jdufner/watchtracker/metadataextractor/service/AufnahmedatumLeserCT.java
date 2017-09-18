@@ -30,32 +30,43 @@
  *
  * Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
+ *
  */
 
-package de.jdufner.watchtracker.metadataextractor.configuration;
+package de.jdufner.watchtracker.metadataextractor.service;
 
-import org.junit.Assert;
+import de.jdufner.watchtracker.metadataextractor.configuration.MetadataextractorConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-/**
- * @author Jürgen Dufner
- * @since 0.3
- */
+import static org.junit.Assert.assertEquals;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MetadataextractorConfig.class})
-public class MetadataextractorPropertiesTest {
+public class AufnahmedatumLeserCT {
 
   @Autowired
-  private MetadataextractorProperties metadataextractorProperties;
+  private AufnahmedatumLeser aufnahmedatumLeser;
 
   @Test
-  public void testPropertiesConfiguration() {
-    // act + assert
-    Assert.assertEquals("ORIGINALZEITSTEMPEL", metadataextractorProperties.getTimestamp());
+  public void testLeseZeitstempel_whenImageShotByFujiX10_expectDigitizedTimestamp() throws Exception {
+    // act
+    String zeitstempel = aufnahmedatumLeser.leseZeitstempel("Sonnenblume.jpg");
+
+    // assert
+    assertEquals("2017:07:29 13:08:54", zeitstempel);
+  }
+
+  @Test
+  public void testLeseZeitstempel_whenImageShotBySamsungS4_expectDigitizedTimestamp() throws Exception {
+    // act
+    String zeitstempel = aufnahmedatumLeser.leseZeitstempel("Tempic_20170819_090757.jpg");
+
+    // assert
+    assertEquals("2017:08:19 09:07:56", zeitstempel);
   }
 
 }

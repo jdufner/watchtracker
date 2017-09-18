@@ -30,13 +30,12 @@
  *
  * Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
+ *
  */
 
 package de.jdufner.watchtracker.metadataextractor.service;
 
 import de.jdufner.watchtracker.metadataextractor.configuration.MetadataextractorProperties;
-import de.jdufner.watchtracker.metadataextractor.service.service.AufnahmedatumLeser;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -45,6 +44,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 /**
@@ -67,10 +67,10 @@ public class AufnahmedatumLeserTest {
     when(metadataextractorProperties.getTimestamp()).thenReturn("ORIGINALZEITSTEMPEL");
 
     // act
-    String aufnahmedatum = aufnahmedatumLeser.leseZeitstempelNachConfiguration(file);
+    String aufnahmedatum = aufnahmedatumLeser.leseZeitstempel(file);
 
     // assert
-    Assert.assertEquals("2017:07:29 13:08:54", aufnahmedatum);
+    assertEquals("2017:07:29 13:08:54", aufnahmedatum);
   }
 
   @Test
@@ -80,10 +80,10 @@ public class AufnahmedatumLeserTest {
     when(metadataextractorProperties.getTimestamp()).thenReturn("DIGITALISIERUNGSZEITSTEMPEL");
 
     // act
-    String aufnahmedatum = aufnahmedatumLeser.leseZeitstempelNachConfiguration(file);
+    String aufnahmedatum = aufnahmedatumLeser.leseZeitstempel(file);
 
     // assert
-    Assert.assertEquals("2017:07:29 13:08:54", aufnahmedatum);
+    assertEquals("2017:07:29 13:08:54", aufnahmedatum);
   }
 
   @Test
@@ -93,10 +93,10 @@ public class AufnahmedatumLeserTest {
     when(metadataextractorProperties.getTimestamp()).thenReturn("ZEITSTEMPEL");
 
     // act
-    String aufnahmedatum = aufnahmedatumLeser.leseZeitstempelNachConfiguration(file);
+    String aufnahmedatum = aufnahmedatumLeser.leseZeitstempel(file);
 
     // assert
-    Assert.assertEquals("2017:09:16 22:37:02", aufnahmedatum);
+    assertEquals("2017:09:16 22:37:02", aufnahmedatum);
   }
 
 }

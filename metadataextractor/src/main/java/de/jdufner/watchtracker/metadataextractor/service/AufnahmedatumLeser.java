@@ -30,9 +30,10 @@
  *
  * Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
+ *
  */
 
-package de.jdufner.watchtracker.metadataextractor.service.service;
+package de.jdufner.watchtracker.metadataextractor.service;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -41,6 +42,8 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import de.jdufner.watchtracker.metadataextractor.configuration.MetadataextractorProperties;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -59,12 +62,22 @@ public class AufnahmedatumLeser {
     this.metadataextractorProperties = metadataextractorProperties;
   }
 
-  public String leseZeitstempelNachConfiguration(final File file) throws ImageProcessingException, IOException {
+  public String leseZeitstempel(final String filename) throws ImageProcessingException, IOException {
+    Resource imageResource = new ClassPathResource(filename);
+    Metadata imageMetadata = ImageMetadataReader.readMetadata(imageResource.getFile());
+    return getDateStringFromMetadata(imageMetadata, Datum.valueOf(metadataextractorProperties.getTimestamp()));
+  }
+
+  public String leseZeitstempel(final File file) throws ImageProcessingException, IOException {
     return getDateStringFromMetadata(file, Datum.valueOf(metadataextractorProperties.getTimestamp()));
   }
 
   private String getDateStringFromMetadata(final File file, final Datum datum) throws ImageProcessingException, IOException {
     final Metadata metadata = ImageMetadataReader.readMetadata(file);
+    return getDateStringFromMetadata(metadata, datum);
+  }
+
+  private String getDateStringFromMetadata(final Metadata metadata, final Datum datum) {
     final Directory directory = metadata.getFirstDirectoryOfType(datum.getDirectory());
     return directory.getString(datum.getKey());
   }

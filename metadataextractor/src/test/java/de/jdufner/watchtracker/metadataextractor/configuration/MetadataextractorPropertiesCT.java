@@ -35,17 +35,28 @@
 
 package de.jdufner.watchtracker.metadataextractor.configuration;
 
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * @author Jürgen Dufner
  * @since 0.3
  */
-@Configuration
-@EnableConfigurationProperties({MetadataextractorProperties.class})
-@ComponentScan("de.jdufner.watchtracker.metadataextractor.service")
-public class MetadataextractorConfig {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {MetadataextractorConfig.class})
+public class MetadataextractorPropertiesCT {
+
+  @Autowired
+  private MetadataextractorProperties metadataextractorProperties;
+
+  @Test
+  public void testPropertiesConfiguration() {
+    // act + assert
+    Assert.assertEquals("ORIGINALZEITSTEMPEL", metadataextractorProperties.getTimestamp());
+  }
 
 }
