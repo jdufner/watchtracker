@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2017.
+  ~
+  ~ This file is part of Watchtracker.
+  ~
+  ~ Watchtracker is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Watchtracker is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Watchtracker.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  ~ Diese Datei ist Teil von Watchtracker.
+  ~
+  ~ Watchtracker ist Freie Software: Sie können es unter den Bedingungen
+  ~ der GNU General Public License, wie von der Free Software Foundation,
+  ~ Version 3 der Lizenz oder (nach Ihrer Wahl) jeder späteren
+  ~ veröffentlichten Version, weiterverbreiten und/oder modifizieren.
+  ~
+  ~ Watchtracker wird in der Hoffnung, dass es nützlich sein wird, aber
+  ~ OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
+  ~ Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
+  ~ Siehe die GNU General Public License für weitere Details.
+  ~
+  ~ Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
+  ~ Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Erfassung</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"></link>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs">
+                <li role="presentation" class="active"><a href="#">Erfassung</a></li>
+                <li role="presentation"><a href="./overview">Überblick</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Erfassung</h1>
+        </div>
+    </div>
+    <form action="#" th:action="@{/tracker}" th:object="${abweichung}" th:method="POST">
+        <div id="differenzDiv" class="row form-horizontal form-group">
+            <label for="differenz" class="col-md-2 control-label">Differenz:</label>
+            <div class="col-md-10">
+                <input id="differenz" class="form-control" type="text" th:field="*{differenz}"
+                       required="true" placeholder="Differenz"/>
+            </div>
+            <div id="differenzHelp" class="col-md-10 col-md-offset-2 help-block" style="display: none;">
+                Ein ganzzahliger Wert muss in Differenz eingegeben werden.
+            </div>
+        </div>
+        <div id="korrekturDiv" class="row form-horizontal form-group">
+            <label for="korrektur" class="col-md-2 control-label">Korrektur:</label>
+            <div class="col-md-10">
+                <input id="korrektur" class="form-control" type="text" th:field="*{korrektur}"
+                       placeholder="Korrektur"/>
+            </div>
+            <div id="korrekturHelp" class="col-md-10 col-md-offset-2 help-block" style="display: none;">
+                Ein ganzzahliger Wert muss in Korrektur eingegeben werden.
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <input id="submit" class="btn btn-primary disabled" disabled="true" type="submit" value="Speichern"/>
+                <input id="reset" class="btn btn-default" type="reset" value="Abbrechen"/>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery-1.12.4.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+<script>
+//<![CDATA[
+  $(document).ready(function() {
+    var form = (function() {
+      var differenz = $("#differenz");
+      var differenzDiv = $("#differenzDiv");
+      var differenzHelp = $("#differenzHelp");
+      var korrektur = $("#korrektur");
+      var korrekturDiv = $("#korrekturDiv");
+      var korrekturHelp = $("#korrekturHelp")
+      var submit = $("#submit");
+      var disableSubmit = function() {
+        submit.addClass("disabled");
+        submit.prop("disabled", true);
+      };
+      var enableSubmit = function() {
+        submit.removeClass("disabled");
+        submit.prop("disabled", false);
+      };
+      var switchSubmit = function() {
+        if (isDifferenzValid() && isKorrekturValid()) {
+          enableSubmit();
+        } else {
+          disableSubmit();
+        }
+      }
+      var showError = function(div, help) {
+        div.addClass("has-error");
+        help.show();
+      };
+      var hideError = function(div, help) {
+        div.removeClass("has-error");
+        help.hide();
+      };
+      var handleEvent = function(isValid, div, help) {
+        if (isValid()) {
+          hideError(div, help);
+        } else {
+          showError(div, help);
+        }
+        switchSubmit();
+      };
+      var isDifferenzValid = function() {
+        return differenz.val().match(/^\-?\d+$/);
+      };
+      var handleDifferenzEvent = function() {
+        handleEvent(isDifferenzValid, differenzDiv, differenzHelp);
+      }
+      var isKorrekturValid = function() {
+        return korrektur.val().match(/^\-?\d*$/);
+      };
+      var handleKorrekturEvent = function() {
+        handleEvent(isKorrekturValid, korrekturDiv, korrekturHelp);
+      }
+      var bindEvents = function() {
+        differenz.on("change keyup", handleDifferenzEvent);
+        korrektur.on("change keyup", handleKorrekturEvent);
+      };
+      return {
+        bindEvents: bindEvents
+      };
+    })();
+    form.bindEvents();
+  });
+//]]>
+</script>
+</body>
+</html>

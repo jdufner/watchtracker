@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 2017.
+  ~
+  ~ This file is part of Watchtracker.
+  ~
+  ~ Watchtracker is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Watchtracker is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Watchtracker.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  ~ Diese Datei ist Teil von Watchtracker.
+  ~
+  ~ Watchtracker ist Freie Software: Sie können es unter den Bedingungen
+  ~ der GNU General Public License, wie von der Free Software Foundation,
+  ~ Version 3 der Lizenz oder (nach Ihrer Wahl) jeder späteren
+  ~ veröffentlichten Version, weiterverbreiten und/oder modifizieren.
+  ~
+  ~ Watchtracker wird in der Hoffnung, dass es nützlich sein wird, aber
+  ~ OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
+  ~ Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
+  ~ Siehe die GNU General Public License für weitere Details.
+  ~
+  ~ Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
+  ~ Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>watchtracker</artifactId>
+    <groupId>de.jdufner.watch</groupId>
+    <version>0.3.2-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>tracker</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.8.0</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>
