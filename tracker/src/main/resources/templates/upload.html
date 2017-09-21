@@ -31,10 +31,9 @@
   ~
   ~ Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
   ~ Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
-  ~
   -->
 
-<html lang="de">
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
 <head>
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -49,21 +48,31 @@
     <div class="col-md-12">
       <ul class="nav nav-tabs">
         <li role="presentation"><a href="./tracker">Erfassung</a></li>
-        <li role="presentation" class="active"><a href="#">Überblick</a></li>
-        <li role="presentation"><a href="./upload">Hochladen</a></li>
+        <li role="presentation"><a href="./overview">Überblick</a></li>
+        <li role="presentation" class="active"><a href="#">Hochladen</a></li>
       </ul>
     </div>
   </div>
   <div class="row">
     <div class="col-md-12">
       <h1>Foto-Upload</h1>
-      <!-- Dialog oder Drag'n'Drop-Fläche -->
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12">
+  <form action="#" th:action="@{/upload}" th:object="${abweichung}" th:method="POST">
+    <div id="imageDiv" class="row form-horizontal form-group">
+      <label for="image" class="col-md-2 control-label">Bild-Datei:</label>
+      <div class="col-md-10">
+        <input id="image" class="form-control-file" type="file" required="true" placeholder="Bild-Datei"/>
+        <!-- class="form-control" -->
+      </div>
     </div>
-  </div>
+    <div class="row">
+      <div class="col-md-12">
+        <input id="submit" class="btn btn-primary disabled" disabled="true" type="submit" value="Speichern"/>
+        <input id="reset" class="btn btn-default" type="reset" value="Abbrechen"/>
+      </div>
+    </div>
+  </form>
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="js/jquery-1.12.4.min.js"></script>

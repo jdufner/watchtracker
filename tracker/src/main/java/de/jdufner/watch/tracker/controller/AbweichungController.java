@@ -30,7 +30,6 @@
  *
  * Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.watch.tracker.controller;
@@ -90,6 +89,12 @@ public class AbweichungController {
     LOG.debug("abweichungId={}", abweichungId);
     abweichungService.deleteAbweichung(Long.parseLong(abweichungId));
     return "redirect:overview";
+  }
+
+  @GetMapping("/upload")
+  public String uploadForm(final Model model) {
+    //model.addAttribute("abweichung", new Abweichung());
+    return "upload";
   }
 
 }
