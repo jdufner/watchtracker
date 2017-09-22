@@ -30,6 +30,7 @@
  *
  * Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
+ *
  */
 
 package de.jdufner.watch.tracker.controller;
@@ -46,6 +47,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * @author Jürgen Dufner
@@ -92,9 +95,19 @@ public class AbweichungController {
   }
 
   @GetMapping("/upload")
-  public String uploadForm(final Model model) {
-    //model.addAttribute("abweichung", new Abweichung());
+  public String upload() {
     return "upload";
+  }
+
+  @PostMapping("/upload2")
+  public String uploadForm(@RequestParam("file") final MultipartFile file,
+                           final RedirectAttributes redirectAttributes) {
+    LOG.debug("name={}", file.getName());
+    LOG.debug("empty={}", file.isEmpty());
+    LOG.debug("contentType={}", file.getContentType());
+    LOG.debug("originalFilename={}", file.getOriginalFilename());
+    LOG.debug("size={}", file.getSize());
+    return "redirect:upload";
   }
 
 }

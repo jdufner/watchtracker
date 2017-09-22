@@ -31,6 +31,7 @@
   ~
   ~ Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
   ~ Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
+  ~
   -->
 
 <html xmlns:th="http://www.thymeleaf.org" lang="de">
@@ -58,11 +59,11 @@
       <h1>Foto-Upload</h1>
     </div>
   </div>
-  <form action="#" th:action="@{/upload}" th:object="${abweichung}" th:method="POST">
+  <form enctype="multipart/form-data" th:action="@{/upload2}" th:method="POST">
     <div id="imageDiv" class="row form-horizontal form-group">
       <label for="image" class="col-md-2 control-label">Bild-Datei:</label>
       <div class="col-md-10">
-        <input id="image" class="form-control-file" type="file" required="true" placeholder="Bild-Datei"/>
+        <input id="image" class="form-control-file" type="file" name="file" required="true" placeholder="Bild-Datei"/>
         <!-- class="form-control" -->
       </div>
     </div>
@@ -78,5 +79,37 @@
 <script src="js/jquery-1.12.4.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="js/bootstrap.min.js"></script>
+<script>
+//<![CDATA[
+$(document).ready(function() {
+  var image = $("#image");
+  var submit = $("#submit");
+  var isFileNameOk = function(fileName) {
+    var result = fileName.match(/.*(png|jpg|jpeg)/i);
+    return result != null;
+  }
+  var disableSubmit = function() {
+    submit.addClass("disabled");
+    submit.prop("disabled", true);
+  };
+  var enableSubmit = function() {
+    submit.removeClass("disabled");
+    submit.prop("disabled", false);
+  };
+  var switchSubmit = function() {
+    if (isFileNameOk(image.val())) {
+      enableSubmit();
+    } else {
+      disableSubmit();
+    }
+  };
+  var bindEvents = function() {
+    image.on("change", switchSubmit);
+  };
+  bindEvents();
+});
+//]]>
+
+</script>
 </body>
 </html>
