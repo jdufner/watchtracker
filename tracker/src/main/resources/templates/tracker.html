@@ -31,7 +31,6 @@
   ~
   ~ Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
   ~ Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
-  ~
   -->
 
 <html xmlns:th="http://www.thymeleaf.org" lang="de">
@@ -103,6 +102,7 @@
       var korrekturDiv = $("#korrekturDiv");
       var korrekturHelp = $("#korrekturHelp")
       var submit = $("#submit");
+      var reset = $("#reset");
       var disableSubmit = function() {
         submit.addClass("disabled");
         submit.prop("disabled", true);
@@ -118,6 +118,13 @@
           disableSubmit();
         }
       }
+      var resetForm = function() {
+        setTimeout(function() {
+          hideError(differenzDiv, differenzHelp);
+          hideError(korrekturDiv, korrekturHelp);
+          disableSubmit();
+        }, 10);
+      };
       var showError = function(div, help) {
         div.addClass("has-error");
         help.show();
@@ -149,6 +156,7 @@
       var bindEvents = function() {
         differenz.on("change keyup", handleDifferenzEvent);
         korrektur.on("change keyup", handleKorrekturEvent);
+        reset.on("click", resetForm);
       };
       return {
         bindEvents: bindEvents

@@ -31,7 +31,6 @@
   ~
   ~ Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
   ~ Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
-  ~
   -->
 
 <html xmlns:th="http://www.thymeleaf.org" lang="de">
@@ -59,12 +58,11 @@
       <h1>Foto-Upload</h1>
     </div>
   </div>
-  <form enctype="multipart/form-data" th:action="@{/upload2}" th:method="POST">
+  <form enctype="multipart/form-data" action="#" th:action="@{/upload}" th:method="POST">
     <div id="imageDiv" class="row form-horizontal form-group">
       <label for="image" class="col-md-2 control-label">Bild-Datei:</label>
       <div class="col-md-10">
         <input id="image" class="form-control-file" type="file" name="file" required="true" placeholder="Bild-Datei"/>
-        <!-- class="form-control" -->
       </div>
     </div>
     <div class="row">
@@ -84,6 +82,7 @@
 $(document).ready(function() {
   var image = $("#image");
   var submit = $("#submit");
+  var reset = $("#reset");
   var isFileNameOk = function(fileName) {
     var result = fileName.match(/.*(png|jpg|jpeg)/i);
     return result != null;
@@ -103,13 +102,16 @@ $(document).ready(function() {
       disableSubmit();
     }
   };
+  var switchSubmitDelayed = function() {
+    setTimeout(switchSubmit, 10);
+  };
   var bindEvents = function() {
     image.on("change", switchSubmit);
+    reset.on("click", switchSubmitDelayed);
   };
   bindEvents();
 });
 //]]>
-
 </script>
 </body>
 </html>
