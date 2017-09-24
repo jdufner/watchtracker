@@ -30,7 +30,6 @@
  *
  * Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.watch.tracker.controller;
@@ -43,6 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -53,6 +53,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -106,10 +107,32 @@ public class AbweichungControllerTest {
 
   @Test
   public void whenDeleteOverview_expectOverview() throws Exception {
+    // act + assert
     mockMvc.perform(delete("/overview").param("abweichungId", "1"))
         .andDo(print())
         .andExpect(status().is3xxRedirection())
         .andExpect(header().string("Location", containsString("overview")));
+  }
+
+  @Test
+  public void whenGetUpload_expectPage() throws Exception {
+    // act + assert
+    mockMvc.perform(get("/upload"))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString("Upload")));
+  }
+
+  @Test
+  public void whenPostUpload_expectFile() throws Exception {
+    // arrange
+    MockMultipartFile multipartFile = new MockMultipartFile("file", "image.jpg", "image/jpg", (byte[]) null);
+
+    // act + assert
+    mockMvc.perform(fileUpload("/upload").file(multipartFile))
+        .andDo(print())
+        .andExpect(status().isFound())
+        .andExpect(header().string("Location", "upload"));
   }
 
 }
