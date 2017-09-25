@@ -25,7 +25,7 @@ node {
   }
 
   stage('Archive') {
-    archiveArtifacts 'target/tracker*.jar, target/tracker*project.zip'
+    archiveArtifacts '**/target/tracker*.jar, **/target/tracker*project.zip'
   }
 
 //  stage('Clean') {
