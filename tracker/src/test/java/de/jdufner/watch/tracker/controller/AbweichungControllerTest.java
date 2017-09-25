@@ -120,7 +120,7 @@ public class AbweichungControllerTest {
     mockMvc.perform(get("/upload"))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(content().string(containsString("Upload")));
+        .andExpect(content().string(containsString("Hochladen")));
   }
 
   @Test

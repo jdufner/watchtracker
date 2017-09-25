@@ -35,7 +35,6 @@
 package de.jdufner.watch.tracker;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,14 +45,13 @@ import java.util.List;
  * <p>
  * <code>--spring.profiles.active=dev,mem</code>
  */
-@SpringBootApplication()
 public class DevTrackerApplication {
 
   public static void main(final String[] args) {
     List<String> arguments = new ArrayList();
     arguments.addAll(Arrays.asList(args));
     arguments.add("--spring.profiles.active=dev,mem");
-    SpringApplication.run(DevTrackerApplication.class, arguments.toArray(new String[arguments.size()]));
+    SpringApplication.run(TrackerApplication.class, arguments.toArray(new String[arguments.size()]));
   }
 
 }
