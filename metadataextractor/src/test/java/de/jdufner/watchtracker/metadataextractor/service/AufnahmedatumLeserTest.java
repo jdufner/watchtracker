@@ -30,13 +30,15 @@
  *
  * Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.watchtracker.metadataextractor.service;
 
 import de.jdufner.watchtracker.metadataextractor.configuration.MetadataextractorProperties;
+import de.jdufner.watchtracker.metadataextractor.exception.MetadataextractorException;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -53,6 +55,9 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class AufnahmedatumLeserTest {
+
+  @Rule
+  public ExpectedException expectedException = ExpectedException.none();
 
   @InjectMocks
   private AufnahmedatumLeser aufnahmedatumLeser;
@@ -97,6 +102,38 @@ public class AufnahmedatumLeserTest {
 
     // assert
     assertEquals("2017:09:16 22:37:02", aufnahmedatum);
+  }
+
+  @Test
+  public void testLeseZeitstempel_whenFileNotExists_expectException() throws Exception {
+    // arrange
+    expectedException.expect(MetadataextractorException.class);
+    final File file = new File("not_existing_file.jpg");
+    when(metadataextractorProperties.getTimestamp()).thenReturn("DIGITALISIERUNGSZEITSTEMPEL");
+
+    // act
+    String aufnahmedatum = aufnahmedatumLeser.leseZeitstempel(file);
+  }
+
+  @Test
+  public void testLeseZeitstempel_whenFileNameNotExists_expectException() throws Exception {
+    // arrange
+    expectedException.expect(MetadataextractorException.class);
+    final String fileName = "not_existing_file.jpg";
+
+    // act
+    String aufnahmedatum = aufnahmedatumLeser.leseZeitstempel(fileName);
+  }
+
+  @Test
+  public void testLeseZeitstempel_whenFileIsNoPicture_expectException() throws Exception {
+    // arrange
+    expectedException.expect(MetadataextractorException.class);
+    final String fileName = "metadataextractor.properties";
+    when(metadataextractorProperties.getTimestamp()).thenReturn("DIGITALISIERUNGSZEITSTEMPEL");
+
+    // act
+    String aufnahmedatum = aufnahmedatumLeser.leseZeitstempel(fileName);
   }
 
 }
