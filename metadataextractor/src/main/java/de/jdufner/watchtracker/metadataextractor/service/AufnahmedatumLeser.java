@@ -64,10 +64,9 @@ public class AufnahmedatumLeser {
 
   public String leseZeitstempel(final String filename) throws MetadataextractorException {
     try {
-      Resource imageResource = new ClassPathResource(filename);
-      Metadata imageMetadata = ImageMetadataReader.readMetadata(imageResource.getFile());
-      return getDateStringFromMetadata(imageMetadata, Datum.valueOf(metadataextractorProperties.getTimestamp()));
-    } catch (IOException | ImageProcessingException e) {
+      final Resource imageResource = new ClassPathResource(filename);
+      return leseZeitstempel(imageResource.getFile());
+    } catch (IOException e) {
       throw new MetadataextractorException(e);
     }
   }
