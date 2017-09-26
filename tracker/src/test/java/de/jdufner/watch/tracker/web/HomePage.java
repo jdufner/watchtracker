@@ -32,52 +32,27 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-package de.jdufner.watch.tracker;
+package de.jdufner.watch.tracker.web;
 
-import de.jdufner.watch.tracker.web.HomePage;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.PageFactory;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.List;
 
-/**
- * @author Jürgen Dufner
- * @since 0.3
- */
-@RunWith(SpringRunner.class)
-@SpringBootTest(properties = {"server.port=9000"}, classes = {TrackerApplication.class})
-@TestConfiguration("server.port=9000")
-//@SeleniumTest(driver = ChromeDriver.class, baseUrl = "http://localhost:9000/tracker")
-public class WebIT {
+public class HomePage {
 
-  //@Autowired
-  private WebDriver webDriver;
+  private final WebDriver driver;
+  @FindBy(xpath = "//table//td/p/a")
+  private List<WebElement> actuatorLinks;
 
-  private HomePage homePage;
-
-  @BeforeClass
-  public static void setUpClass() {
-    System.setProperty("webdriver.chrome.driver", "/usr/bin/google-chrome");
+  public HomePage(WebDriver driver) {
+    this.driver = driver;
+    driver.get("http://localhost:9000/tracker");
   }
 
-  @Before
-  public void setUp() throws Exception {
-    webDriver = new ChromeDriver();
-    webDriver.get("http://localhost:9000/tracker");
-    homePage = PageFactory.initElements(webDriver, HomePage.class);
-  }
-
-  @Test
-  public void test() {
-    assertThat(homePage.getTitle()).isEqualTo("Erfassung");
+  public String getTitle() {
+    return driver.getTitle();
   }
 
 }
