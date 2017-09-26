@@ -30,7 +30,6 @@
  *
  * Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.watch.tracker.businessobjects;
@@ -107,7 +106,7 @@ public class Abweichung {
       return abweichung2;
     });
     return pairs.stream()
-        .mapToInt(pairOfAbweichungen -> pairOfAbweichungen.berechneKorrigierteDifferenz())
+        .mapToInt(Pair::berechneKorrigierteDifferenz)
         .sum();
   }
 

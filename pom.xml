@@ -32,7 +32,6 @@
   ~
   ~ Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
   ~ Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
-  ~
   -->
 
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
@@ -42,11 +41,6 @@
   <groupId>de.jdufner.watch</groupId>
   <artifactId>watchtracker</artifactId>
   <version>0.3.2-SNAPSHOT</version>
-
-  <modules>
-    <module>tracker</module>
-    <module>metadataextractor</module>
-  </modules>
   <packaging>pom</packaging>
 
   <name>watchtracker</name>
@@ -66,8 +60,6 @@
     <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
     <sonar.junit.reportsPath>${project.build.directory}/surefire-reports</sonar.junit.reportsPath>
     <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-    <sonar.jacoco.reportPath>${jacoco.outputDir}/${jacoco.out.ut.file}</sonar.jacoco.reportPath>
-    <sonar.jacoco.itReportPath>${jacoco.outputDir}/${jacoco.out.it.file}</sonar.jacoco.itReportPath>
     <sonar.jacoco.reportPaths>${jacoco.outputDir}/${jacoco.out.ut.file}, ${jacoco.outputDir}/${jacoco.out.it.file}
     </sonar.jacoco.reportPaths>
   </properties>
@@ -91,7 +83,7 @@
         <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>
           <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.3.0.603</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -494,5 +486,10 @@
       </roles>
     </developer>
   </developers>
+
+  <modules>
+    <module>tracker</module>
+    <module>metadataextractor</module>
+  </modules>
 
 </project>

@@ -30,7 +30,6 @@
  *
  * Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.watchtracker.metadataextractor.service;
@@ -42,6 +41,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import de.jdufner.watchtracker.metadataextractor.configuration.MetadataextractorProperties;
+import de.jdufner.watchtracker.metadataextractor.exception.MetadataextractorException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -62,19 +62,26 @@ public class AufnahmedatumLeser {
     this.metadataextractorProperties = metadataextractorProperties;
   }
 
-  public String leseZeitstempel(final String filename) throws ImageProcessingException, IOException {
-    Resource imageResource = new ClassPathResource(filename);
-    Metadata imageMetadata = ImageMetadataReader.readMetadata(imageResource.getFile());
-    return getDateStringFromMetadata(imageMetadata, Datum.valueOf(metadataextractorProperties.getTimestamp()));
+  public String leseZeitstempel(final String filename) throws MetadataextractorException {
+    try {
+      final Resource imageResource = new ClassPathResource(filename);
+      return leseZeitstempel(imageResource.getFile());
+    } catch (IOException e) {
+      throw new MetadataextractorException(e);
+    }
   }
 
-  public String leseZeitstempel(final File file) throws ImageProcessingException, IOException {
+  public String leseZeitstempel(final File file) throws MetadataextractorException {
     return getDateStringFromMetadata(file, Datum.valueOf(metadataextractorProperties.getTimestamp()));
   }
 
-  private String getDateStringFromMetadata(final File file, final Datum datum) throws ImageProcessingException, IOException {
-    final Metadata metadata = ImageMetadataReader.readMetadata(file);
-    return getDateStringFromMetadata(metadata, datum);
+  private String getDateStringFromMetadata(final File file, final Datum datum) throws MetadataextractorException {
+    try {
+      final Metadata metadata = ImageMetadataReader.readMetadata(file);
+      return getDateStringFromMetadata(metadata, datum);
+    } catch (ImageProcessingException | IOException e) {
+      throw new MetadataextractorException(e);
+    }
   }
 
   private String getDateStringFromMetadata(final Metadata metadata, final Datum datum) {

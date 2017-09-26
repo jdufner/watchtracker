@@ -31,61 +31,61 @@
   ~
   ~ Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
   ~ Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
-  ~
   -->
 
 <html xmlns:th="http://www.thymeleaf.org" lang="de">
 <head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Erfassung</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet"></link>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title>Erfassung</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet"></link>
 </head>
 <body>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#">Erfassung</a></li>
-                <li role="presentation"><a href="./overview">Überblick</a></li>
-            </ul>
-        </div>
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="nav nav-tabs">
+        <li role="presentation" class="active"><a href="#">Erfassung</a></li>
+        <li role="presentation"><a href="./overview">Übersicht</a></li>
+        <li role="presentation"><a href="./upload">Hochladen</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Erfassung</h1>
+    </div>
+  </div>
+  <form action="#" th:action="@{/tracker}" th:object="${abweichung}" th:method="POST">
+    <div id="differenzDiv" class="row form-horizontal form-group">
+      <label for="differenz" class="col-md-2 control-label">Differenz:</label>
+      <div class="col-md-10">
+        <input id="differenz" class="form-control" type="text" th:field="*{differenz}"
+               required="true" placeholder="Differenz"/>
+      </div>
+      <div id="differenzHelp" class="col-md-10 col-md-offset-2 help-block" style="display: none;">
+        Ein ganzzahliger Wert muss in Differenz eingegeben werden.
+      </div>
+    </div>
+    <div id="korrekturDiv" class="row form-horizontal form-group">
+      <label for="korrektur" class="col-md-2 control-label">Korrektur:</label>
+      <div class="col-md-10">
+        <input id="korrektur" class="form-control" type="text" th:field="*{korrektur}"
+               placeholder="Korrektur"/>
+      </div>
+      <div id="korrekturHelp" class="col-md-10 col-md-offset-2 help-block" style="display: none;">
+        Ein ganzzahliger Wert muss in Korrektur eingegeben werden.
+      </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
-            <h1>Erfassung</h1>
-        </div>
+      <div class="col-md-12">
+        <input id="submit" class="btn btn-primary disabled" disabled="true" type="submit" value="Speichern"/>
+        <input id="reset" class="btn btn-default" type="reset" value="Abbrechen"/>
+      </div>
     </div>
-    <form action="#" th:action="@{/tracker}" th:object="${abweichung}" th:method="POST">
-        <div id="differenzDiv" class="row form-horizontal form-group">
-            <label for="differenz" class="col-md-2 control-label">Differenz:</label>
-            <div class="col-md-10">
-                <input id="differenz" class="form-control" type="text" th:field="*{differenz}"
-                       required="true" placeholder="Differenz"/>
-            </div>
-            <div id="differenzHelp" class="col-md-10 col-md-offset-2 help-block" style="display: none;">
-                Ein ganzzahliger Wert muss in Differenz eingegeben werden.
-            </div>
-        </div>
-        <div id="korrekturDiv" class="row form-horizontal form-group">
-            <label for="korrektur" class="col-md-2 control-label">Korrektur:</label>
-            <div class="col-md-10">
-                <input id="korrektur" class="form-control" type="text" th:field="*{korrektur}"
-                       placeholder="Korrektur"/>
-            </div>
-            <div id="korrekturHelp" class="col-md-10 col-md-offset-2 help-block" style="display: none;">
-                Ein ganzzahliger Wert muss in Korrektur eingegeben werden.
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <input id="submit" class="btn btn-primary disabled" disabled="true" type="submit" value="Speichern"/>
-                <input id="reset" class="btn btn-default" type="reset" value="Abbrechen"/>
-            </div>
-        </div>
-    </form>
+  </form>
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="js/jquery-1.12.4.min.js"></script>
@@ -102,6 +102,7 @@
       var korrekturDiv = $("#korrekturDiv");
       var korrekturHelp = $("#korrekturHelp")
       var submit = $("#submit");
+      var reset = $("#reset");
       var disableSubmit = function() {
         submit.addClass("disabled");
         submit.prop("disabled", true);
@@ -117,6 +118,13 @@
           disableSubmit();
         }
       }
+      var resetForm = function() {
+        setTimeout(function() {
+          hideError(differenzDiv, differenzHelp);
+          hideError(korrekturDiv, korrekturHelp);
+          disableSubmit();
+        }, 10);
+      };
       var showError = function(div, help) {
         div.addClass("has-error");
         help.show();
@@ -148,6 +156,7 @@
       var bindEvents = function() {
         differenz.on("change keyup", handleDifferenzEvent);
         korrektur.on("change keyup", handleKorrekturEvent);
+        reset.on("click", resetForm);
       };
       return {
         bindEvents: bindEvents
