@@ -57,3 +57,21 @@ Starte Service
 
 Stoppe Service
 `sudo systemctl stop tracker.service`
+
+# Sourcecode-Analyse
+
+## jQAssistant
+
+Datenbank erzeugen
+
+`mvn clean verify -DskipTests -Pjqa`
+
+Datenbank starten
+
+`mvn jqassistant:server -Pjqa`
+
+Use experimental Neo4J 3 Support
+
+`mvn clean verify -DskipTests -DskipITs -Djqassistant.neoj4Version=3 -Pjqa -X | tee maven_log.txt`
+
+`mvn jqassistant:server -Djqassistant.neo4jVersion=3 -Pjqa`
